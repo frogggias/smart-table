@@ -18,7 +18,7 @@ public abstract class SmartTableActivity extends AppCompatActivity {
     private static final String TAG = SmartTableActivity.class.getSimpleName();
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smarttable);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
