@@ -2,10 +2,15 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-def siteUrl = 'https://github.com/izacus/FuzzyDateFormatter'      // Homepage URL of the library
-def gitUrl = 'https://github.com/izacus/FuzzyDateFormatter.git'   // Git repository URL
+def siteUrl = 'https://github.com/frogggias/smart-table'      // Homepage URL of the library
+def gitUrl = 'https://github.com/frogggias/smart-table.git'   // Git repository URL
 group = 'com.frogggias.smarttable'
-version = "0.1"
+
+def longVersionName = "git -C ${rootDir} describe --tags --long".execute().text.trim()
+def (fullVersionTag, versionBuild, gitSha) = longVersionName.tokenize('-')
+def(versionMajor, versionMinor, versionPatch) = fullVersionTag.tokenize('.')
+
+version = "$versionMajor.$versionMinor.$versionPatch"
 
 android {
     compileSdkVersion 22
@@ -14,8 +19,21 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "0.1"
+        //versionCode VERSION_MAJOR * 10000 + VERSION_MINOR * 100 + VERSION_BUILD;
+        //versionName "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUILD}"
+
+        // Set the version name
+        versionName "$versionMajor.$versionMinor.$versionPatch"
+
+        // Turn the version name into a version code
+        versionCode versionMajor.toInteger() * 100000 +
+                versionMinor.toInteger() * 10000 +
+                versionPatch.toInteger() * 1000 +
+                versionBuild.toInteger()
+
+        // Friendly print the version output to the Gradle console
+        printf("\n--------" + "VERSION DATA--------" + "\n" + "- CODE: " + versionCode + "\n" +
+                "- NAME: " + versionName + "\n----------------------------\n")
     }
 
     buildTypes {
@@ -34,7 +52,7 @@ install {
                 packaging 'aar'
 
                 // Add your description here
-                name '<Your library description>'
+                name 'SmartTables for Android'
                 url siteUrl
 
                 // Set your license
@@ -46,9 +64,9 @@ install {
                 }
                 developers {
                     developer {
-                        id '<your user ID>'
-                        name '<your name>'
-                        email '<your email>'
+                        id 'frogggias'
+                        name 'Tomáš Šůstek'
+                        email 'frogggias@frogggias.com'
                     }
                 }
                 scm {
@@ -96,7 +114,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = "<Your library name>"
+        name = "bintray-frogggias-android-smart-table"
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
