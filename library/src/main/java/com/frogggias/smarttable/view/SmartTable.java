@@ -88,6 +88,10 @@ public class SmartTable
     private void updateUI() {
     }
 
+    private void createHeader() {
+
+    }
+
     private void invalidateData() {
         if (mLoaderManager == null || mSmartTableProvider == null) {
             return;
