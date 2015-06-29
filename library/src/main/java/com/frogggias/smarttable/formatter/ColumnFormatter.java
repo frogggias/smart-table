@@ -5,13 +5,14 @@ import android.support.annotation.IntDef;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
  * Created by frogggias on 29.06.15.
  */
-public abstract class ColumnFormatter {
+public abstract class ColumnFormatter implements Serializable {
 
     @IntDef({View.TEXT_ALIGNMENT_TEXT_START, View.TEXT_ALIGNMENT_TEXT_END, View.TEXT_ALIGNMENT_CENTER})
     @Retention(RetentionPolicy.SOURCE)

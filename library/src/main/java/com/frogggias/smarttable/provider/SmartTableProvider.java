@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.frogggias.smarttable.formatter.ColumnFormatter;
 import com.frogggias.smarttable.formatter.TextColumnFormatter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * Created by frogggias on 29.06.15.
  */
-public class SmartTableProvider {
+public class SmartTableProvider implements Serializable {
 
     private static final String TAG = SmartTableProvider.class.getSimpleName();
 

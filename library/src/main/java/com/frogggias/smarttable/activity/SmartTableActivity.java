@@ -5,9 +5,12 @@ import android.os.PersistableBundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.frogggias.smarttable.R;
+import com.frogggias.smarttable.fragment.SmartTableFragment;
+import com.frogggias.smarttable.provider.SmartTableProvider;
 import com.frogggias.smarttable.utils.MaterialHelper;
 
 /**
@@ -17,6 +20,10 @@ public abstract class SmartTableActivity extends AppCompatActivity {
 
     private static final String TAG = SmartTableActivity.class.getSimpleName();
 
+    SmartTableFragment mContentFragment;
+
+    protected abstract SmartTableProvider getSmartTableProvider();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,5 +31,16 @@ public abstract class SmartTableActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(MaterialHelper.getPrimaryColor(this));
+
+        if (savedInstanceState == null) {
+            mContentFragment = SmartTableFragment.newInstance(getSmartTableProvider());
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.content, mContentFragment)
+                    .commit();
+        } else {
+            mContentFragment = (SmartTableFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.content);
+        }
     }
 }
