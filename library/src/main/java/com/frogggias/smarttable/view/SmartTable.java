@@ -8,9 +8,15 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
+import com.frogggias.smarttable.R;
+import com.frogggias.smarttable.adapter.SmartTableAdapter;
 import com.frogggias.smarttable.provider.SmartTableProvider;
 import com.frogggias.smarttable.export.CSVTableExporter;
 import com.frogggias.smarttable.export.TableExporter;
@@ -39,6 +45,14 @@ public class SmartTable
 
     /* CONTROLLER */
     protected LoaderManager mLoaderManager;
+    protected SmartTableAdapter mAdapter;
+    private OnRowClickedListener mOnRowClickedListener;
+
+    /* VIEW */
+    private LinearLayout mHeader;
+    private RecyclerView mList;
+    private View mEmpty;
+    private View mLoading;
 
     public SmartTable(Context context) {
         super(context);
@@ -62,14 +76,23 @@ public class SmartTable
     }
 
     private void initUI() {
+        View view = LayoutInflater.from(getContext())
+                .inflate(R.layout.table, this, true);
 
+        mList = (RecyclerView) findViewById(R.id.list);
+        mEmpty = findViewById(R.id.empty);
+        mLoading = findViewById(R.id.loading);
+        updateUI();
+    }
+
+    private void updateUI() {
     }
 
     private void invalidateData() {
         if (mLoaderManager == null || mSmartTableProvider == null) {
             return;
         }
-
+        mAdapter = new SmartTableAdapter(getContext(), null);
         mLoaderManager.restartLoader(LOADER_DEFAULT, null, this);
     }
 
@@ -94,6 +117,10 @@ public class SmartTable
         return "";
     }
 
+    public void setOnRowClickedListener(OnRowClickedListener listener) {
+        mOnRowClickedListener = listener;
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
@@ -108,11 +135,19 @@ public class SmartTable
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+        if (mAdapter != null) {
+            mAdapter.swapCursor(data);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        if (mAdapter != null) {
+            mAdapter.swapCursor(null);
+        }
+    }
 
+    public interface OnRowClickedListener {
+        void onRowClicked(Cursor cursor);
     }
 }
