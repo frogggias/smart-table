@@ -7,4 +7,6 @@ public abstract class TableExporter {
 
     private static final String TAG = TableExporter.class.getSimpleName();
 
+    public abstract boolean hasSettings();
+
 }

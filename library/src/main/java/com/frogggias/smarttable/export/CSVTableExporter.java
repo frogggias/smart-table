@@ -7,4 +7,8 @@ public class CSVTableExporter extends TableExporter {
 
     private static final String TAG = CSVTableExporter.class.getSimpleName();
 
+    @Override
+    public boolean hasSettings() {
+        return false;
+    }
 }
