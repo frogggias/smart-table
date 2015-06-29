@@ -24,7 +24,6 @@ public abstract class ColumnFormatter {
     public abstract void setContent(TextView textView, Cursor cursor, String columnName);
 
     // Used internally or for data export
-    @TextAlignment public abstract int getTitleTextAlign();
     @TextAlignment public abstract int getContentTextAlign();
     public abstract String getAsText(Cursor cursor, String columnName);
 

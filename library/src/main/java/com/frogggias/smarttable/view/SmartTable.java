@@ -1,4 +1,4 @@
-package com.frogggias.smarttable;
+package com.frogggias.smarttable.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -9,13 +9,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.frogggias.smarttable.provider.SmartTableProvider;
 import com.frogggias.smarttable.export.CSVTableExporter;
 import com.frogggias.smarttable.export.TableExporter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

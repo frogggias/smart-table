@@ -1,3 +1,4 @@
 <resources>
-
+    <!-- CSV Exporter -->
+    <string name="exporter_csv_name">Export to CSV</string>
 </resources>

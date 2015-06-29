@@ -1,4 +1,4 @@
-package com.frogggias.smarttable;
+package com.frogggias.smarttable.provider;
 
 import android.net.Uri;
 import android.support.annotation.StringRes;
