@@ -15,6 +15,8 @@ public class MaterialHelper {
 
     private static final String TAG = MaterialHelper.class.getSimpleName();
 
+    public static final double LUMININOSITY_LIGHT = 5.0F;
+
     public static @ColorInt int getPrimaryColor(Context context) {
         return getColor(context, R.attr.colorPrimary);
     }
@@ -54,5 +56,9 @@ public class MaterialHelper {
         } else {
             return (l1+0.05) / (l2+0.05);
         }
+    }
+
+    public static boolean isLight(@ColorInt int color) {
+        return getLuminosity(color) > LUMININOSITY_LIGHT;
     }
 }

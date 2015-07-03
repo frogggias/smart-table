@@ -1,7 +1,9 @@
 package com.frogggias.smarttable.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.ColorInt;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,7 +32,9 @@ public abstract class SmartTableActivity extends AppCompatActivity {
         setContentView(R.layout.activity_smarttable);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(MaterialHelper.getPrimaryColor(this));
+        @ColorInt int primaryColor = MaterialHelper.getPrimaryColor(this);
+        @ColorInt int textColor = MaterialHelper.isLight(primaryColor) ? Color.BLACK : Color.WHITE;
+        toolbar.setBackgroundColor(primaryColor);
 
         if (savedInstanceState == null) {
             mContentFragment = SmartTableFragment.newInstance(getSmartTableProvider());
