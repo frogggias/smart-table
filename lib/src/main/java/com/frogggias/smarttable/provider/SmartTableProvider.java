@@ -122,7 +122,7 @@ public class SmartTableProvider implements Serializable {
 
     public static class Builder {
 
-        private SmartTableProvider provider;
+        private SmartTableProvider mProvider;
 
         private boolean mSimpleBuildMode = false;
 
@@ -135,36 +135,40 @@ public class SmartTableProvider implements Serializable {
         private ArrayList<Class<? extends ColumnFormatter>> mColumnFormatter = new ArrayList<>();
 
         public Builder(Uri uri) {
-            provider = new SmartTableProvider(uri);
+            mProvider = new SmartTableProvider(uri);
+        }
+
+        public Builder(SmartTableProvider provider) {
+            mProvider = provider;
         }
 
         public Builder setColumnNames(String[] columnName) {
-            provider.mColumnName = columnName;
+            mProvider.mColumnName = columnName;
             return this;
         }
 
         public Builder setSortColumnNames(String[] sortColumnNames) {
-            provider.mSortColumnName = sortColumnNames;
+            mProvider.mSortColumnName = sortColumnNames;
             return this;
         }
 
         public Builder setSearchColumnNames(String[] searchColumnNames) {
-            provider.mSearchColumnName = searchColumnNames;
+            mProvider.mSearchColumnName = searchColumnNames;
             return this;
         }
 
         public Builder setSearchable(boolean[] searchable) {
-            provider.mSearchable = searchable;
+            mProvider.mSearchable = searchable;
             return this;
         }
 
         public Builder setColumnTitleNames(String[] columnTitleNames) {
-            provider.mColumnTitle = columnTitleNames;
+            mProvider.mColumnTitle = columnTitleNames;
             return this;
         }
 
         public Builder setColumnTitleNames(@StringRes int[] columnResNames) {
-            provider.mColumnTitleResId = columnResNames;
+            mProvider.mColumnTitleResId = columnResNames;
             return this;
         }
 
@@ -179,6 +183,7 @@ public class SmartTableProvider implements Serializable {
             mColumnFormatter.add(formatter);
             mSortColumnName.add(sortColumnName);
             mSearchColumnName.add(searchColumnName);
+            mSimpleBuildMode = true;
             return this;
         }
 
@@ -212,20 +217,20 @@ public class SmartTableProvider implements Serializable {
             return data;
         }
 
-        private void setProvider(SmartTableProvider externalProvider) {
-            provider = externalProvider;
+        private void setmProvider(SmartTableProvider externalProvider) {
+            mProvider = externalProvider;
         }
 
         public SmartTableProvider build() {
             if (mSimpleBuildMode) {
-                provider.mColumnName = getStringArray(mColumnName);
-                provider.mSortColumnName = getStringArray(mSortColumnName);
-                provider.mSearchColumnName = getStringArray(mSearchColumnName);
-                provider.mColumnTitleResId = getIntArray(mColumnTitleResId);
-                provider.mSortable = getNotNullBooleanArray(mSearchColumnName);
-                provider.mSearchable = getNotNullBooleanArray(mSearchColumnName);
+                mProvider.mColumnName = getStringArray(mColumnName);
+                mProvider.mSortColumnName = getStringArray(mSortColumnName);
+                mProvider.mSearchColumnName = getStringArray(mSearchColumnName);
+                mProvider.mColumnTitleResId = getIntArray(mColumnTitleResId);
+                mProvider.mSortable = getNotNullBooleanArray(mSearchColumnName);
+                mProvider.mSearchable = getNotNullBooleanArray(mSearchColumnName);
             }
-            return provider;
+            return mProvider;
         }
     }
 

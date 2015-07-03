@@ -36,4 +36,23 @@ public class MaterialHelper {
 
         return color;
     }
+
+    public static double getLuminosity(@ColorInt int color) {
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = (color >> 0) & 0xFF;
+        double l1 = 0.2126 * Math.pow(r/255, 2.2) +
+                0.7152 * Math.pow(g / 255, 2.2) +
+                0.0722 * Math.pow(b / 255, 2.2);
+
+        double l2 = 0.2126 * Math.pow(0 / 255, 2.2) +
+                0.7152 * Math.pow(0 / 255, 2.2) +
+                0.0722 * Math.pow(0 / 255, 2.2);
+
+        if (l1 > l2) {
+            return (l1+0.05) / (l2+0.05);
+        } else {
+            return (l1+0.05) / (l2+0.05);
+        }
+    }
 }
