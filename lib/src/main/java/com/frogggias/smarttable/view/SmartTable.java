@@ -83,6 +83,10 @@ public class SmartTable
         mList = (RecyclerView) findViewById(R.id.list);
         mEmpty = findViewById(R.id.empty);
         mLoading = findViewById(R.id.loading);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mList.setLayoutManager(layoutManager);
         updateUI();
     }
 
@@ -98,7 +102,6 @@ public class SmartTable
             return;
         }
         mAdapter = new SmartTableAdapter(getContext(), null);
-        mList.setLayoutManager(new LinearLayoutManager(getContext()));
         mList.setAdapter(mAdapter);
         mLoaderManager.restartLoader(LOADER_DEFAULT, null, this);
     }
