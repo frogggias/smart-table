@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -97,6 +98,8 @@ public class SmartTable
             return;
         }
         mAdapter = new SmartTableAdapter(getContext(), null);
+        mList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mList.setAdapter(mAdapter);
         mLoaderManager.restartLoader(LOADER_DEFAULT, null, this);
     }
 
@@ -107,6 +110,7 @@ public class SmartTable
 
     public void setLoaderManager(LoaderManager loaderManager) {
         mLoaderManager = loaderManager;
+        invalidateData();
     }
 
     protected String getSelection() {
