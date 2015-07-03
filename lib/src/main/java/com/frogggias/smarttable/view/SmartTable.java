@@ -76,7 +76,7 @@ public class SmartTable
     }
 
     private void initUI() {
-        View view = LayoutInflater.from(getContext())
+        LayoutInflater.from(getContext())
                 .inflate(R.layout.table, this, true);
 
         mList = (RecyclerView) findViewById(R.id.list);
