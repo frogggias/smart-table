@@ -3,6 +3,7 @@ package com.frogggias.smarttable.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
@@ -99,6 +100,7 @@ public class SmartTableHeader extends FrameLayout {
     }
 
     private void invalidateSortIcon() {
+        mText.setTypeface(null, Typeface.NORMAL);
         if (!isSortable()) {
             mSort.setVisibility(GONE);
             mView.setClickable(false);
@@ -111,6 +113,7 @@ public class SmartTableHeader extends FrameLayout {
                 case SmartTable.SORT_ASC:
                     mSort.setRotation(mSortDir == SmartTable.SORT_ASC ? 0f : 180f);
                     mSort.setVisibility(VISIBLE);
+                    mText.setTypeface(null, Typeface.BOLD);
                     break;
                 default:
                     mSort.setVisibility(INVISIBLE);
