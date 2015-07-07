@@ -34,7 +34,8 @@ import java.util.List;
  * Created by frogggias on 29.06.15.
  */
 public class SmartTable
-        extends FrameLayout implements LoaderManager.LoaderCallbacks<Cursor> {
+        extends FrameLayout
+        implements LoaderManager.LoaderCallbacks<Cursor>, SmartTableHeader.OnHeaderClickListener {
 
     private static final String TAG = SmartTable.class.getSimpleName();
 
@@ -126,10 +127,18 @@ public class SmartTable
             lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             lp.weight = mSmartTableProvider.getColumnWeight(i);
 
+            boolean isSortable = mSmartTableProvider.isSortable(i);
+
             SmartTableHeader header = new SmartTableHeader(mHeader.getContext());
             header.setLayoutParams(lp);
-            header.setSortable(mSmartTableProvider.isSortable(i));
+            header.setSortable(isSortable);
             header.setText(mSmartTableProvider.getColumnTitle(getContext(), i));
+            header.setOnHeaderClickListener(this);
+            if ((!defaultSortSet) && (isSortable)) {
+                header.setSortDirection(SORT_ASC);
+                mSortColumn = mSmartTableProvider.getSortColumnName(i);
+                defaultSortSet = true;
+            }
 
             mHeader.addView(header);
         }
@@ -169,11 +178,29 @@ public class SmartTable
     }
 
     protected String getOrder() {
-        return "";
+        StringBuilder builder = new StringBuilder();
+        builder.append(mSortColumn);
+        if (mSortOrder == SORT_DESC) {
+            builder.append(" DESC");
+        }
+        return builder.toString();
     }
 
     public void setOnRowClickedListener(OnRowClickedListener listener) {
         mOnRowClickedListener = listener;
+    }
+
+    @Override
+    public void onClick(SmartTableHeader view) {
+        for (int i = 0; i < mHeader.getChildCount(); i++) {
+            SmartTableHeader header = (SmartTableHeader) mHeader.getChildAt(i);
+            if (header != view) {
+                header.setSortDirection(SORT_NONE);
+            } else {
+                mSortOrder = header.getSortDirection();
+            }
+        }
+        mLoaderManager.restartLoader(LOADER_DEFAULT, null, this);
     }
 
     @Override

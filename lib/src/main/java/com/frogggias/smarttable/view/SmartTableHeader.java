@@ -26,6 +26,9 @@ public class SmartTableHeader extends FrameLayout {
     private boolean mSortable = false;
     private @SmartTable.SortDirection int mSortDir = SmartTable.SORT_NONE;
 
+    /* CONTROLLER */
+    OnHeaderClickListener mListener;
+
     /* VIEW */
     private View mView;
     private TextView mText;
@@ -60,6 +63,10 @@ public class SmartTableHeader extends FrameLayout {
     public void setSortDirection(@SmartTable.SortDirection int dir) {
         mSortDir = dir;
         invalidateSortIcon();
+    }
+
+    public @SmartTable.SortDirection int getSortDirection() {
+        return mSortDir;
     }
 
     public boolean isSortable() {
@@ -99,6 +106,41 @@ public class SmartTableHeader extends FrameLayout {
         } else {
             mSort.setVisibility(VISIBLE);
             mView.setClickable(true);
+            switch (mSortDir) {
+                case SmartTable.SORT_DESC:
+                case SmartTable.SORT_ASC:
+                    mSort.setRotation(mSortDir == SmartTable.SORT_ASC ? 0f : 180f);
+                    mSort.setVisibility(VISIBLE);
+                    break;
+                default:
+                    mSort.setVisibility(INVISIBLE);
+            }
         }
+    }
+
+    private void sortDirectionToggle() {
+        if (mSortDir == SmartTable.SORT_ASC) {
+            setSortDirection(SmartTable.SORT_DESC);
+        } else {
+            setSortDirection(SmartTable.SORT_ASC);
+        }
+        invalidateSortIcon();
+    }
+
+    public void setOnHeaderClickListener(OnHeaderClickListener listener) {
+        mListener = listener;
+    }
+
+    @Override
+    public boolean performClick() {
+        sortDirectionToggle();
+        if (mListener != null) {
+            mListener.onClick(this);
+        }
+        return true;
+    }
+
+    interface OnHeaderClickListener {
+        void onClick(SmartTableHeader view);
     }
 }
