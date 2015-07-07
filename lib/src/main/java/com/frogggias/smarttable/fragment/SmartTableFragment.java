@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.provider.SmartTableProvider;
+import com.frogggias.smarttable.view.SmartTable;
 
 /**
  * Created by frogggias on 29.06.15.
@@ -19,7 +20,11 @@ public class SmartTableFragment extends Fragment {
 
     private static final String ARG_PROVIDER = "provider";
 
+    /* DATA */
     private SmartTableProvider mProvider;
+
+    /* VIEW */
+    private SmartTable mSmartTable;
 
     public static final SmartTableFragment newInstance(SmartTableProvider mProvider) {
         SmartTableFragment fragment = new SmartTableFragment();
@@ -31,10 +36,19 @@ public class SmartTableFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mProvider = (SmartTableProvider) getArguments().getSerializable(ARG_PROVIDER);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.table, container, false);
+        View view = inflater.inflate(R.layout.fragment_smarttable, container, false);
+        mSmartTable = (SmartTable) view.findViewById(R.id.table);
+        mSmartTable.setTableProvider(mProvider);
+        mSmartTable.setLoaderManager(getLoaderManager());
         return view;
     }
 }

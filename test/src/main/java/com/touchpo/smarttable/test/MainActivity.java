@@ -15,7 +15,10 @@ public class MainActivity extends SmartTableActivity {
     protected SmartTableProvider getSmartTableProvider() {
         return
             new SmartTableProvider.Builder(ContactsContract.Contacts.CONTENT_URI)
-                .addColumn(ContactsContract.PRIMARY_ACCOUNT_NAME, "name")
+                .setDefaultSearchable(true)
+                .setDefaultSortable(true)
+                .addColumn(ContactsContract.Contacts.DISPLAY_NAME, "name", 0, null, ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.DISPLAY_NAME)
+                    .addColumn(ContactsContract.Contacts.DISPLAY_NAME, "name-not-sort")
                 .build();
     }
 }

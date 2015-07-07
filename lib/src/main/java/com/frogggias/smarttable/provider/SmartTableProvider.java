@@ -25,7 +25,7 @@ public class SmartTableProvider implements Serializable {
     public static final String COLUMN_TYPE_TEXT = "text";
 
     /* DATABASE DATA */
-    private final Uri mUri;
+    private final String mUri;
     private String[] mColumnName;
     private String[] mSortColumnName;
     private String[] mSearchColumnName;
@@ -41,11 +41,15 @@ public class SmartTableProvider implements Serializable {
     protected HashMap<Class<? extends ColumnFormatter>, ColumnFormatter> mFormatterInstances = new HashMap<>();
 
     public SmartTableProvider(Uri uri) {
-        mUri = uri;
+        mUri = uri.toString();
     }
 
     public Uri getUri() {
-        return mUri;
+        return Uri.parse(mUri);
+    }
+
+    public int getColumnCount() {
+        return mColumnName.length;
     }
 
     public String getColumnName(int column) {
@@ -69,31 +73,35 @@ public class SmartTableProvider implements Serializable {
     }
 
     public String getColumnTitle(Context context, int column) {
-        if ((mColumnTitleResId == null) || (mColumnTitleResId.length < column)) {
+        if ((mColumnTitleResId == null) || (mColumnTitleResId.length <= column) || (mColumnTitleResId[column] == 0)) {
                 return getColumnTitle(column);
         }
         return context.getString(mColumnTitleResId[column]);
     }
 
     private String getColumnTitle(int column) {
-        if ((mColumnTitle == null) || (mColumnTitle.length < column)) {
+        if ((mColumnTitle == null) || (mColumnTitle.length <= column)) {
             return getColumnName(column);
         }
         return mColumnTitle[column];
     }
 
     public boolean isSortable(int column) {
-        if ((mSortable == null) || (mSortable.length < column)) {
+        if ((mSortable == null) || (mSortable.length <= column)) {
             return false;
         }
         return mSortable[column];
     }
 
     public boolean isSearchable(int column) {
-        if ((mSearchable == null) || (mSearchable.length < column)) {
+        if ((mSearchable == null) || (mSearchable.length <= column)) {
             return false;
         }
         return mSearchable[column];
+    }
+
+    public int getColumnWeight(int column) {
+        return 1;
     }
 
     public void formatContentTextView(TextView textView, Cursor cursor, int column) {
@@ -125,6 +133,8 @@ public class SmartTableProvider implements Serializable {
         private SmartTableProvider mProvider;
 
         private boolean mSimpleBuildMode = false;
+        private boolean mDefaultSortable = false;
+        private boolean mDefaultSearchable = false;
 
         private ArrayList<String> mColumnName = new ArrayList();
         private ArrayList<String> mSortColumnName = new ArrayList<>();
@@ -140,6 +150,16 @@ public class SmartTableProvider implements Serializable {
 
         public Builder(SmartTableProvider provider) {
             mProvider = provider;
+        }
+
+        public Builder setDefaultSortable(boolean sortable) {
+            mDefaultSortable = sortable;
+            return this;
+        }
+
+        public Builder setDefaultSearchable(boolean searchable) {
+            mDefaultSearchable = searchable;
+            return this;
         }
 
         public Builder setColumnNames(String[] columnName) {
@@ -172,6 +192,10 @@ public class SmartTableProvider implements Serializable {
             return this;
         }
 
+        public Builder addColumn(String name, String title) {
+            return addColumn(name, title, 0, null, null, null);
+        }
+
         public Builder addColumn(String name, String title, @StringRes int titleResId) {
             return addColumn(name, title, titleResId, null, null, null);
         }
@@ -180,6 +204,7 @@ public class SmartTableProvider implements Serializable {
                                  Class<? extends ColumnFormatter> formatter, String sortColumnName, String searchColumnName) {
             mColumnName.add(name);
             mColumnTitle.add(name);
+            mColumnTitleResId.add(titleResId);
             mColumnFormatter.add(formatter);
             mSortColumnName.add(sortColumnName);
             mSearchColumnName.add(searchColumnName);
@@ -211,14 +236,20 @@ public class SmartTableProvider implements Serializable {
             Iterator<String> iterator = list.iterator();
 
             for (int i = 0; i < list.size(); i++) {
-                data[i] = !iterator.next().equals(null);
+                data[i] = iterator.next() != null;
             }
 
             return data;
         }
 
-        private void setmProvider(SmartTableProvider externalProvider) {
-            mProvider = externalProvider;
+        private boolean[] getValBooleanArray(int size, boolean value) {
+            boolean[] data = new boolean[size];
+            if (value) {
+                for(int i = 0 ; i < size; i++) {
+                    data[i]= value;
+                }
+            }
+            return data;
         }
 
         public SmartTableProvider build() {
@@ -227,7 +258,16 @@ public class SmartTableProvider implements Serializable {
                 mProvider.mSortColumnName = getStringArray(mSortColumnName);
                 mProvider.mSearchColumnName = getStringArray(mSearchColumnName);
                 mProvider.mColumnTitleResId = getIntArray(mColumnTitleResId);
-                mProvider.mSortable = getNotNullBooleanArray(mSearchColumnName);
+                if (mDefaultSortable) {
+                    mProvider.mSortable = getValBooleanArray(mSortColumnName.size(), true);
+                } else {
+                    mProvider.mSortable = getNotNullBooleanArray(mSortColumnName);
+                }
+                if (mDefaultSearchable) {
+                    mProvider.mSearchable = getValBooleanArray(mSearchColumnName.size(), true);
+                } else {
+                    mProvider.mSearchable = getNotNullBooleanArray(mSearchColumnName);
+                }
                 mProvider.mSearchable = getNotNullBooleanArray(mSearchColumnName);
             }
             return mProvider;

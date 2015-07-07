@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <dimen name="shadow_size">5dp</dimen>
+    <dimen name="header_height">56dp</dimen>
+    <dimen name="column_padding">8dp</dimen>
+
 </resources>
