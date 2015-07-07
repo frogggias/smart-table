@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class SmartTable
         extends FrameLayout
-        implements LoaderManager.LoaderCallbacks<Cursor>, SmartTableHeader.OnHeaderClickListener {
+        implements LoaderManager.LoaderCallbacks<Cursor>, SmartTableHeader.OnHeaderClickListener, SmartTableAdapter.OnItemClickListener {
 
     private static final String TAG = SmartTable.class.getSimpleName();
 
@@ -156,6 +156,8 @@ public class SmartTable
 
         mAdapter = new SmartTableAdapter(getContext(), null, mSmartTableProvider);
         mList.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(this);
+
         mLoaderManager.restartLoader(LOADER_DEFAULT, null, this);
     }
 
@@ -191,7 +193,14 @@ public class SmartTable
     }
 
     @Override
-    public void onClick(SmartTableHeader view) {
+    public void onItemClick(Cursor cursor) {
+        if (mOnRowClickedListener != null) {
+            mOnRowClickedListener.onRowClicked(cursor);
+        }
+    }
+
+    @Override
+    public void onHeaderClick(SmartTableHeader view) {
         for (int i = 0; i < mHeader.getChildCount(); i++) {
             SmartTableHeader header = (SmartTableHeader) mHeader.getChildAt(i);
             if (header != view) {

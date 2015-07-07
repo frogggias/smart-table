@@ -135,12 +135,12 @@ public class SmartTableHeader extends FrameLayout {
     public boolean performClick() {
         sortDirectionToggle();
         if (mListener != null) {
-            mListener.onClick(this);
+            mListener.onHeaderClick(this);
         }
         return true;
     }
 
     interface OnHeaderClickListener {
-        void onClick(SmartTableHeader view);
+        void onHeaderClick(SmartTableHeader view);
     }
 }

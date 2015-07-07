@@ -1,8 +1,10 @@
 package com.frogggias.smarttable.fragment;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,8 @@ import com.frogggias.smarttable.view.SmartTable;
 /**
  * Created by frogggias on 29.06.15.
  */
-public class SmartTableFragment extends Fragment {
+public class SmartTableFragment
+        extends Fragment implements SmartTable.OnRowClickedListener {
 
     private static final String TAG = SmartTableFragment.class.getSimpleName();
 
@@ -49,6 +52,13 @@ public class SmartTableFragment extends Fragment {
         mSmartTable = (SmartTable) view.findViewById(R.id.table);
         mSmartTable.setTableProvider(mProvider);
         mSmartTable.setLoaderManager(getLoaderManager());
+        mSmartTable.setOnRowClickedListener(this);
+
         return view;
+    }
+
+    @Override
+    public void onRowClicked(Cursor cursor) {
+        Log.d(TAG, "Row clicked: " + cursor.toString());
     }
 }

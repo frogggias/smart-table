@@ -19,7 +19,11 @@ public class SmartTableAdapter extends CursorRecyclerViewAdapter<SmartTableAdapt
 
     private static final String TAG = SmartTableAdapter.class.getSimpleName();
 
+    /* DATA */
     protected SmartTableProvider mProvider;
+
+    /* CONTROLLER */
+    OnItemClickListener mOnItemClickListener;
 
     public SmartTableAdapter(Context context, Cursor cursor, SmartTableProvider provider) {
         super(context, cursor);
@@ -28,12 +32,9 @@ public class SmartTableAdapter extends CursorRecyclerViewAdapter<SmartTableAdapt
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        LinearLayout layout = new LinearLayout(viewGroup.getContext());
-        layout.setLayoutParams(
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        layout.setOrientation(LinearLayout.HORIZONTAL);
         LayoutInflater inflater = LayoutInflater.from(getContext());
-
+        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.row, viewGroup, false);
+        layout.setClickable(mOnItemClickListener != null);
         LinearLayout.LayoutParams lp;
 
         for (int i = 0; i < mProvider.getColumnCount(); i++) {
@@ -49,20 +50,43 @@ public class SmartTableAdapter extends CursorRecyclerViewAdapter<SmartTableAdapt
     @Override
     protected void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
         LinearLayout layout = viewHolder.getView();
+        viewHolder.pos = cursor.getPosition();
         for (int i = 0; i < layout.getChildCount(); i++) {
             TextView tv = (TextView) layout.getChildAt(i);
             mProvider.formatContentTextView(tv, cursor, i);
         }
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mOnItemClickListener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Cursor cursor);
+    }
+
+    class ViewHolder
+            extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        public int pos;
 
         public ViewHolder(LinearLayout itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
         }
 
         public LinearLayout getView() {
             return (LinearLayout) itemView;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mOnItemClickListener != null) {
+                Cursor cursor = getCursor();
+                cursor.move(pos);
+                mOnItemClickListener.onItemClick(cursor);
+            }
         }
     }
 }
