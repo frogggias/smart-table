@@ -2,8 +2,12 @@ package com.frogggias.smarttable.formatter;
 
 import android.database.Cursor;
 import android.support.annotation.IntDef;
+import android.text.SpannableString;
 import android.view.View;
 import android.widget.TextView;
+
+import com.frogggias.smarttable.canonizer.SimpleStringCanonizer;
+import com.frogggias.smarttable.canonizer.StringCanonizer;
 
 import java.io.Serializable;
 import java.lang.annotation.Retention;
@@ -22,6 +26,8 @@ public abstract class ColumnFormatter implements Serializable {
     public static final int ALIGNMENT_RIGHT = View.TEXT_ALIGNMENT_TEXT_END;
     public static final int ALIGNMENT_CENTER = View.TEXT_ALIGNMENT_CENTER;
 
+
+
     public abstract void setContent(TextView textView, Cursor cursor, String columnName);
 
     // Used internally or for data export
@@ -35,6 +41,8 @@ public abstract class ColumnFormatter implements Serializable {
 
         return cursor.getString(cursor.getColumnIndex(columnName));
     }
+
+    protected abstract SpannableString getSearchString(Cursor cursor, String columnName, String searchString);
 
     protected long getLong(Cursor cursor, String columnName) {
         if (!validate(cursor, columnName)) {
@@ -54,6 +62,10 @@ public abstract class ColumnFormatter implements Serializable {
             return false;
         }
         return true;
+    }
+
+    protected StringCanonizer getCanonizer() {
+        return new SimpleStringCanonizer();
     }
 
 }

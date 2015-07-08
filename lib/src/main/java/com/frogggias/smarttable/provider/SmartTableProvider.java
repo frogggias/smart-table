@@ -38,6 +38,7 @@ public class SmartTableProvider implements Serializable {
     private boolean[] mSortable;
     private boolean[] mSearchable;
 
+    /* FORMATTER */
     protected HashMap<Class<? extends ColumnFormatter>, ColumnFormatter> mFormatterInstances = new HashMap<>();
 
     public SmartTableProvider(Uri uri) {
@@ -128,6 +129,10 @@ public class SmartTableProvider implements Serializable {
         getFormatter(column).setContent(textView, cursor, getColumnName(column));
     }
 
+    public void formatContentTextView(TextView textView, Cursor cursor, int column, String query) {
+
+    }
+
     private ColumnFormatter getFormatter(int column) {
         if ((mColumnFormatter == null) || (mColumnFormatter.length < column)
                 || (mColumnFormatter[column] == null)) {
@@ -146,6 +151,15 @@ public class SmartTableProvider implements Serializable {
             }
         }
         return mFormatterInstances.get(clz);
+    }
+
+    public boolean isSearchable() {
+        for (int column = 0; column < getColumnCount(); column++) {
+            if (isSearchable(column)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static class Builder {

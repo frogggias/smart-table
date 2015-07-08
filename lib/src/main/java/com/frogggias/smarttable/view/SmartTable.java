@@ -6,11 +6,13 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,8 @@ import android.widget.LinearLayout;
 
 import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.adapter.SmartTableAdapter;
+import com.frogggias.smarttable.canonizer.SimpleStringCanonizer;
+import com.frogggias.smarttable.canonizer.StringCanonizer;
 import com.frogggias.smarttable.provider.SmartTableProvider;
 import com.frogggias.smarttable.export.CSVTableExporter;
 import com.frogggias.smarttable.export.TableExporter;
@@ -27,6 +31,7 @@ import com.frogggias.smarttable.utils.MaterialHelper;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,14 +62,15 @@ public class SmartTable
     protected boolean mExportable = true;
     protected List<TableExporter> mTableExporters = Arrays.asList(DEFAULT_TABLE_EXPORTERS);
     protected String mSortColumn = null;
-    protected @SortDirection
-    int mSortOrder = SORT_NONE;
+    protected @SortDirection int mSortOrder = SORT_NONE;
+    protected String mSearchQuery = null;
 
     /* CONTROLLER */
     protected LoaderManager mLoaderManager;
     protected SmartTableAdapter mAdapter;
     private OnRowClickedListener mOnRowClickedListener;
     private Cursor mCursor;
+    private StringCanonizer mCanonizer = new SimpleStringCanonizer();
 
     /* VIEW */
     private View mHeaderWrapper;
@@ -94,8 +100,25 @@ public class SmartTable
         initUI();
     }
 
+    public void setSearchQuery(String query) {
+        if (TextUtils.isEmpty(query)) {
+            setQuery(null);
+            return;
+        }
+        if (query.equals(mSearchQuery)) {
+            return;
+        }
+        setQuery(query);
+    }
+
+    protected void setQuery(String query) {
+        mSearchQuery = query;
+        mAdapter.setSearchQuery(query);
+        mLoaderManager.restartLoader(LOADER_DEFAULT, null, this);
+    }
+
     private void initUI() {
-        View view = LayoutInflater.from(getContext())
+        LayoutInflater.from(getContext())
                 .inflate(R.layout.table, this, true);
 
         mHeaderWrapper = findViewById(R.id.header_wrapper);
@@ -172,6 +195,14 @@ public class SmartTable
         invalidateData();
     }
 
+    public void setCanonizer(StringCanonizer canonizer) {
+        mCanonizer = canonizer;
+    }
+
+    public StringCanonizer getCanonizer() {
+        return mCanonizer;
+    }
+
     public List<TableExporter> getTableExporters() {
         return mTableExporters;
     }
@@ -181,11 +212,31 @@ public class SmartTable
     }
 
     protected String getSelection() {
-        return "";
+        StringBuilder sb = new StringBuilder();
+        // Search Queries
+        if (!TextUtils.isEmpty(mSearchQuery) && (mSmartTableProvider.isSearchable())) {
+            for (int column = 0; column < mSmartTableProvider.getColumnCount(); column++) {
+                if (sb.length() > 0) {
+                    sb.append(" OR ");
+                }
+                sb.append(mSmartTableProvider.getSortColumnName(column) + " LIKE ?");
+            }
+        }
+
+        return sb.toString();
     }
 
     protected String[] getSelectionArgs() {
-        return new String[] {};
+        ArrayList<String> args = new ArrayList<>();
+
+        // Search
+        if (!TextUtils.isEmpty(mSearchQuery) && (mSmartTableProvider.isSearchable())) {
+            for (int column = 0; column < mSmartTableProvider.getColumnCount(); column++) {
+                args.add("%" + mSearchQuery + "%");
+            }
+        }
+
+        return args.toArray(new String[args.size()]);
     }
 
     protected String getOrder() {

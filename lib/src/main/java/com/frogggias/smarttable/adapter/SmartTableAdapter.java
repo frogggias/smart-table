@@ -15,12 +15,15 @@ import com.frogggias.smarttable.provider.SmartTableProvider;
 /**
  * Created by frogggias on 29.06.15.
  */
-public class SmartTableAdapter extends CursorRecyclerViewAdapter<SmartTableAdapter.ViewHolder> {
+public class SmartTableAdapter
+        extends CursorRecyclerViewAdapter<SmartTableAdapter.ViewHolder>
+        implements SearchableAdapter {
 
     private static final String TAG = SmartTableAdapter.class.getSimpleName();
 
     /* DATA */
     protected SmartTableProvider mProvider;
+    protected String mQuery;
 
     /* CONTROLLER */
     OnItemClickListener mOnItemClickListener;
@@ -51,14 +54,19 @@ public class SmartTableAdapter extends CursorRecyclerViewAdapter<SmartTableAdapt
     protected void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
         LinearLayout layout = viewHolder.getView();
         viewHolder.pos = cursor.getPosition();
-        for (int i = 0; i < layout.getChildCount(); i++) {
-            TextView tv = (TextView) layout.getChildAt(i);
-            mProvider.formatContentTextView(tv, cursor, i);
+        for (int column = 0; column < layout.getChildCount(); column++) {
+            TextView tv = (TextView) layout.getChildAt(column);
+            mProvider.formatContentTextView(tv, cursor, column, mQuery);
         }
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         mOnItemClickListener = listener;
+    }
+
+    @Override
+    public void setSearchQuery(String query) {
+        mQuery = query;
     }
 
     public interface OnItemClickListener {

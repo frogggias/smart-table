@@ -10,7 +10,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:theme="@style/ToolbarDarkOverflow"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+
+
+        <LinearLayout
+            android:id="@+id/search_container"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/search_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:hint="@string/search"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/actionbar_color_hint"/>
+
+            <ImageView
+                android:id="@+id/search_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/search_clear"
+                android:src="@drawable/ic_content_clear"/>
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/content"

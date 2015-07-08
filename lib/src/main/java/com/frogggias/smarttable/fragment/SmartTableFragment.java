@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.frogggias.smarttable.R;
+import com.frogggias.smarttable.activity.SmartTableSearchableActivity;
 import com.frogggias.smarttable.export.TableExporter;
 import com.frogggias.smarttable.provider.SmartTableProvider;
 import com.frogggias.smarttable.utils.MaterialHelper;
@@ -29,7 +30,7 @@ import java.util.List;
  */
 public class SmartTableFragment
         extends Fragment
-        implements SmartTable.OnRowClickedListener {
+        implements SmartTable.OnRowClickedListener, SmartTableSearchable {
 
     private static final String TAG = SmartTableFragment.class.getSimpleName();
 
@@ -40,6 +41,7 @@ public class SmartTableFragment
 
     /* VIEW */
     private SmartTable mSmartTable;
+    private MenuItem mSearchMenuItem;
 
     public static final SmartTableFragment newInstance(SmartTableProvider mProvider) {
         SmartTableFragment fragment = new SmartTableFragment();
@@ -76,6 +78,7 @@ public class SmartTableFragment
         super.onCreateOptionsMenu(menu, inflater);
         setMenuIconsTint(menu, MaterialHelper.isLight(MaterialHelper.getPrimaryColor(getActivity())) ?
                 Color.BLACK : Color.WHITE);
+        mSearchMenuItem = menu.findItem(R.id.search);
 
     }
 
@@ -97,6 +100,8 @@ public class SmartTableFragment
         final int itemId = item.getItemId();
         if (itemId == R.id.export) {
             export();
+        } else if (itemId == R.id.search) {
+            openSearch();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -114,5 +119,22 @@ public class SmartTableFragment
             // TODO exporter chooser
         }
 
+    }
+
+    protected void openSearch() {
+        if (getActivity() instanceof SmartTableSearchableActivity) {
+            ((SmartTableSearchableActivity) getActivity()).openSearch();
+            mSearchMenuItem.setVisible(false);
+        }
+    }
+
+    @Override
+    public void setSearchQuery(String query) {
+        mSmartTable.setSearchQuery(query);
+    }
+
+    @Override
+    public void cancelSearch() {
+        mSearchMenuItem.setVisible(true);
     }
 }
