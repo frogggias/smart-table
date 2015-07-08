@@ -64,6 +64,7 @@ public class SmartTable
     protected LoaderManager mLoaderManager;
     protected SmartTableAdapter mAdapter;
     private OnRowClickedListener mOnRowClickedListener;
+    private Cursor mCursor;
 
     /* VIEW */
     private View mHeaderWrapper;
@@ -171,6 +172,14 @@ public class SmartTable
         invalidateData();
     }
 
+    public List<TableExporter> getTableExporters() {
+        return mTableExporters;
+    }
+
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
     protected String getSelection() {
         return "";
     }
@@ -226,6 +235,7 @@ public class SmartTable
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mCursor = data;
         if (mAdapter != null) {
             mAdapter.swapCursor(data);
         }
@@ -233,6 +243,7 @@ public class SmartTable
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        mCursor = null;
         if (mAdapter != null) {
             mAdapter.swapCursor(null);
         }

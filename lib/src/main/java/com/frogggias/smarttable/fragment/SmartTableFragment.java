@@ -6,18 +6,25 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.frogggias.smarttable.R;
+import com.frogggias.smarttable.export.TableExporter;
 import com.frogggias.smarttable.provider.SmartTableProvider;
 import com.frogggias.smarttable.view.SmartTable;
+
+import java.util.List;
 
 /**
  * Created by frogggias on 29.06.15.
  */
 public class SmartTableFragment
-        extends Fragment implements SmartTable.OnRowClickedListener {
+        extends Fragment
+        implements SmartTable.OnRowClickedListener {
 
     private static final String TAG = SmartTableFragment.class.getSimpleName();
 
@@ -42,6 +49,7 @@ public class SmartTableFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         mProvider = (SmartTableProvider) getArguments().getSerializable(ARG_PROVIDER);
     }
 
@@ -58,7 +66,32 @@ public class SmartTableFragment
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.default_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final int itemId = item.getItemId();
+        if (itemId == R.id.export) {
+            export();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onRowClicked(Cursor cursor) {
         Log.d(TAG, "Row clicked: " + cursor.toString());
+    }
+
+    protected void export() {
+        List<TableExporter> exporters = mSmartTable.getTableExporters();
+        if (exporters.size() == 1) {
+            exporters.get(0).export(mProvider.toString(), mProvider, mSmartTable.getCursor());
+        } else {
+            // TODO exporter chooser
+        }
+
     }
 }

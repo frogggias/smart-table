@@ -56,6 +56,26 @@ public class SmartTableProvider implements Serializable {
         return mColumnName[column];
     }
 
+    public String[] getColumnNames() {
+        return mColumnName;
+    }
+
+    public String[] getColumnTitles() {
+        String[] columnTitles = new String[mColumnName.length];
+        for(int i = 0; i <mColumnName.length; i++) {
+            columnTitles[i]= getColumnTitle(i);
+        }
+        return columnTitles;
+    }
+
+    public String[] getColumnTitles(Context context) {
+        String[] columnTitles = new String[mColumnName.length];
+        for(int i = 0; i <mColumnName.length; i++) {
+            columnTitles[i]= getColumnTitle(context, i);
+        }
+        return columnTitles;
+    }
+
     public String getSortColumnName(int column) {
         if ((mSortColumnName == null) || (mSortColumnName.length < column)
                 || mSortColumnName[column] == null) {
