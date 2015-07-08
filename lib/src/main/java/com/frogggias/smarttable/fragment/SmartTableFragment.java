@@ -1,6 +1,9 @@
 package com.frogggias.smarttable.fragment;
 
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.export.TableExporter;
 import com.frogggias.smarttable.provider.SmartTableProvider;
+import com.frogggias.smarttable.utils.MaterialHelper;
 import com.frogggias.smarttable.view.SmartTable;
 
 import java.util.List;
@@ -69,6 +74,22 @@ public class SmartTableFragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.default_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        setMenuIconsTint(menu, MaterialHelper.isLight(MaterialHelper.getPrimaryColor(getActivity())) ?
+                Color.BLACK : Color.WHITE);
+
+    }
+
+    public void setMenuIconsTint(Menu menu, int color) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            if (item.hasSubMenu()) {
+                SubMenu submenu = item.getSubMenu();
+                setMenuIconsTint(submenu, color);
+            }
+            Drawable d = item.getIcon();
+            d.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+
+        }
     }
 
     @Override
