@@ -130,7 +130,7 @@ public class SmartTableProvider implements Serializable {
     }
 
     public void formatContentTextView(TextView textView, Cursor cursor, int column, String query) {
-
+        getFormatter(column).setContent(textView, cursor, getColumnName(column), query);
     }
 
     private ColumnFormatter getFormatter(int column) {

@@ -29,6 +29,7 @@ public abstract class ColumnFormatter implements Serializable {
 
 
     public abstract void setContent(TextView textView, Cursor cursor, String columnName);
+    public abstract void setContent(TextView textView, Cursor cursor, String columnName, String query);
 
     // Used internally or for data export
     @TextAlignment public abstract int getContentTextAlign();

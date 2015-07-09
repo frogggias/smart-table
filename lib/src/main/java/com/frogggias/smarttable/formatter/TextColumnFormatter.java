@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.widget.TextView;
 
@@ -22,6 +23,11 @@ public class TextColumnFormatter extends ColumnFormatter {
     }
 
     @Override
+    public void setContent(TextView textView, Cursor cursor, String columnName, String query) {
+        textView.setText(getSearchString(cursor, columnName, query));
+    }
+
+    @Override
     public int getContentTextAlign() {
         return ALIGNMENT_LEFT;
     }
@@ -35,9 +41,9 @@ public class TextColumnFormatter extends ColumnFormatter {
     protected SpannableString getSearchString(Cursor cursor, String columnName, String searchString) {
         String text = getAsText(cursor, columnName);
         SpannableString spannable = new SpannableString(text);
-        if (getCanonizer().canonize(text).contains(searchString)) {
-            int start = text.indexOf(searchString);
-            spannable.setSpan(BOLD, start, searchString.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        if ((!TextUtils.isEmpty(searchString)) && (getCanonizer().canonize(text).contains(searchString))) {
+            int start = getCanonizer().canonize(text).indexOf(searchString);
+            spannable.setSpan(BOLD, start, start + searchString.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         }
         return spannable;
     }
