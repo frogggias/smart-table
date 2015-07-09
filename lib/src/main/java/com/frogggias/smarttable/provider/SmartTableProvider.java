@@ -29,6 +29,8 @@ public class SmartTableProvider implements Serializable {
     private String[] mColumnName;
     private String[] mSortColumnName;
     private String[] mSearchColumnName;
+    private String mDefaultSelection = "";
+    private String[] mDefaultSelectionArgs = new String[] {};
 
     /* UI DATA */
     @StringRes
@@ -38,7 +40,7 @@ public class SmartTableProvider implements Serializable {
     private boolean[] mSortable;
     private boolean[] mSearchable;
 
-    /* FORMATTER */
+    /* FORMATTER CACHE */
     protected HashMap<Class<? extends ColumnFormatter>, ColumnFormatter> mFormatterInstances = new HashMap<>();
 
     public SmartTableProvider(Uri uri) {
@@ -123,6 +125,14 @@ public class SmartTableProvider implements Serializable {
 
     public int getColumnWeight(int column) {
         return 1;
+    }
+
+    public String getDefaultSelection() {
+        return mDefaultSelection;
+    }
+
+    public String[] getDefaultSelectionArgs() {
+        return mDefaultSelectionArgs;
     }
 
     public void formatContentTextView(TextView textView, Cursor cursor, int column) {
@@ -243,6 +253,16 @@ public class SmartTableProvider implements Serializable {
             mSortColumnName.add(sortColumnName);
             mSearchColumnName.add(searchColumnName);
             mSimpleBuildMode = true;
+            return this;
+        }
+
+        public Builder setDefaultSelection(String selection) {
+            mProvider.mDefaultSelection = selection;
+            return this;
+        }
+
+        public Builder setDefaultSelectionArgs(String[] selectionArgs) {
+            mProvider.mDefaultSelectionArgs = selectionArgs;
             return this;
         }
 

@@ -213,14 +213,28 @@ public class SmartTable
 
     protected String getSelection() {
         StringBuilder sb = new StringBuilder();
+
+        // Default selecion
+        String defaultSelection = mSmartTableProvider.getDefaultSelection();
+        if (!TextUtils.isEmpty(defaultSelection)) {
+            sb.append('(')
+                .append(defaultSelection)
+                .append(')');
+        }
+
         // Search Queries
         if (!TextUtils.isEmpty(mSearchQuery) && (mSmartTableProvider.isSearchable())) {
+            if (sb.length() > 0) {
+                sb.append(" AND ");
+            }
+            sb.append('(');
             for (int column = 0; column < mSmartTableProvider.getColumnCount(); column++) {
-                if (sb.length() > 0) {
+                if (column > 0) {
                     sb.append(" OR ");
                 }
                 sb.append(mSmartTableProvider.getSortColumnName(column) + " LIKE ?");
             }
+            sb.append(')');
         }
 
         return sb.toString();
@@ -228,6 +242,14 @@ public class SmartTable
 
     protected String[] getSelectionArgs() {
         ArrayList<String> args = new ArrayList<>();
+
+        // Default selection
+        String[] defaultSelectionArgs = mSmartTableProvider.getDefaultSelectionArgs();
+        if (defaultSelectionArgs != null) {
+            for (int i = 0 ; i < defaultSelectionArgs.length; i++) {
+                args.add(defaultSelectionArgs[i]);
+            }
+        }
 
         // Search
         if (!TextUtils.isEmpty(mSearchQuery) && (mSmartTableProvider.isSearchable())) {
