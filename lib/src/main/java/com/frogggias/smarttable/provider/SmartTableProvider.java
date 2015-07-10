@@ -247,7 +247,7 @@ public class SmartTableProvider implements Serializable {
         public Builder addColumn(String name, String title, @StringRes int titleResId,
                                  Class<? extends ColumnFormatter> formatter, String sortColumnName, String searchColumnName) {
             mColumnName.add(name);
-            mColumnTitle.add(name);
+            mColumnTitle.add(title);
             mColumnTitleResId.add(titleResId);
             mColumnFormatter.add(formatter);
             mSortColumnName.add(sortColumnName);
@@ -311,6 +311,7 @@ public class SmartTableProvider implements Serializable {
                 mProvider.mColumnName = getStringArray(mColumnName);
                 mProvider.mSortColumnName = getStringArray(mSortColumnName);
                 mProvider.mSearchColumnName = getStringArray(mSearchColumnName);
+                mProvider.mColumnTitle = getStringArray(mColumnTitle);
                 mProvider.mColumnTitleResId = getIntArray(mColumnTitleResId);
                 if (mDefaultSortable) {
                     mProvider.mSortable = getValBooleanArray(mSortColumnName.size(), true);
