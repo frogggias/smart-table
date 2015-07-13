@@ -53,6 +53,14 @@ public abstract class ColumnFormatter implements Serializable {
         return cursor.getLong(cursor.getColumnIndex(columnName));
     }
 
+    protected double getDouble(Cursor cursor, String columnName) {
+        if (!validate(cursor, columnName)) {
+            return 0d;
+        }
+
+        return cursor.getDouble(cursor.getColumnIndex(columnName));
+    }
+
     protected boolean validate(Cursor cursor, String columnName) {
         if ((cursor == null) || (cursor.isAfterLast())) {
             return false;
