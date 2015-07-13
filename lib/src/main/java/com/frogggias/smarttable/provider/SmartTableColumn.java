@@ -8,10 +8,12 @@ import com.frogggias.smarttable.filter.ColumnFilterProvider;
 import com.frogggias.smarttable.formatter.ColumnFormatter;
 import com.frogggias.smarttable.formatter.TextColumnFormatter;
 
+import java.io.Serializable;
+
 /**
  * Created by frogggias on 10.07.15.
  */
-public class SmartTableColumn {
+public class SmartTableColumn implements Serializable {
 
     private static final String TAG = SmartTableColumn.class.getSimpleName();
 

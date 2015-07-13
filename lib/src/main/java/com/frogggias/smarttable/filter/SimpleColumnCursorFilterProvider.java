@@ -11,7 +11,7 @@ public class SimpleColumnCursorFilterProvider implements ColumnFilterCursorProvi
 
     private static final String TAG = SimpleColumnCursorFilterProvider.class.getSimpleName();
 
-    protected Uri mUri;
+    protected String mUri;
     protected String mNameColumn;
     protected String mValueColumn;
 
@@ -20,7 +20,7 @@ public class SimpleColumnCursorFilterProvider implements ColumnFilterCursorProvi
     }
 
     public SimpleColumnCursorFilterProvider(Uri uri, String nameColumn, String valueColumn) {
-        mUri = uri;
+        mUri = uri.toString();
         mNameColumn = nameColumn;
         if (mValueColumn == null) {
             mValueColumn = mNameColumn;
@@ -31,7 +31,7 @@ public class SimpleColumnCursorFilterProvider implements ColumnFilterCursorProvi
 
     @Override
     public Uri getUri() {
-        return mUri;
+        return Uri.parse(mUri);
     }
 
     @Override

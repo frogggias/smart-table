@@ -4,10 +4,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import java.io.Serializable;
+
 /**
  * Created by frogggias on 09.07.15.
  */
-public interface ColumnFilterCursorProvider extends ColumnFilterProvider {
+public interface ColumnFilterCursorProvider extends ColumnFilterProvider, Serializable {
 
     public Uri getUri();
 

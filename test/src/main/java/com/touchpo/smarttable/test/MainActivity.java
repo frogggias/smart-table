@@ -18,7 +18,7 @@ public class MainActivity extends SmartTableActivity {
     @Override
     protected SmartTableProvider getSmartTableProvider() {
         SmartTableColumn.Factory factory = new SmartTableColumn.Factory();
-        factory.setDefaultSearchable(false);
+        factory.setDefaultSearchable(true);
         factory.setDefaultSortable(true);
 
         // Filtrable column
