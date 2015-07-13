@@ -79,7 +79,7 @@ public class SmartTableFragment
         setMenuIconsTint(menu, MaterialHelper.isLight(MaterialHelper.getPrimaryColor(getActivity())) ?
                 Color.BLACK : Color.WHITE);
         mSearchMenuItem = menu.findItem(R.id.search);
-
+        mSearchMenuItem.setVisible(mProvider.isSearchable());
     }
 
     public void setMenuIconsTint(Menu menu, int color) {

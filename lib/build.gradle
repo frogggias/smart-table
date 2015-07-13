@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'aar-link-sources'
+
 
 def siteUrl = 'https://github.com/frogggias/smart-table'      // Homepage URL of the library
 def gitUrl = 'https://github.com/frogggias/smart-table.git'   // Git repository URL
@@ -96,6 +98,7 @@ task sourcesJar(type: Jar) {
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    failOnError = false
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
