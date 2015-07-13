@@ -1,6 +1,7 @@
 package com.frogggias.smarttable.formatter;
 
 import android.database.Cursor;
+import android.view.Gravity;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
@@ -17,12 +18,12 @@ public class NumberColumnFormatter extends TextColumnFormatter {
     @Override
     public void setContent(TextView textView, Cursor cursor, String columnName) {
         textView.setText(nf.format(getDouble(cursor, columnName)));
-        textView.setGravity(ALIGNMENT_RIGHT);
+        textView.setGravity(Gravity.RIGHT);
     }
 
     @Override
     public void setContent(TextView textView, Cursor cursor, String columnName, String query) {
         textView.setText(nf.format(getDouble(cursor, columnName)));
-        textView.setGravity(ALIGNMENT_RIGHT);
+        textView.setGravity(Gravity.RIGHT);
     }
 }
