@@ -24,10 +24,12 @@ import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.adapter.SmartTableAdapter;
 import com.frogggias.smarttable.canonizer.SimpleStringCanonizer;
 import com.frogggias.smarttable.canonizer.StringCanonizer;
+import com.frogggias.smarttable.provider.SmartTableColumn;
 import com.frogggias.smarttable.provider.SmartTableProvider;
 import com.frogggias.smarttable.export.CSVTableExporter;
 import com.frogggias.smarttable.export.TableExporter;
 import com.frogggias.smarttable.utils.MaterialHelper;
+import com.frogggias.smarttable.view.support.DividerItemDecoration;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -132,6 +134,7 @@ public class SmartTable
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mList.setLayoutManager(layoutManager);
+        mList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
 
         updateUI();
     }
@@ -147,20 +150,22 @@ public class SmartTable
         boolean defaultSortSet = false;
         LinearLayout.LayoutParams lp;
         for (int i = 0; i < mSmartTableProvider.getColumnCount(); i++) {
+            SmartTableColumn column = mSmartTableProvider.getColumn(i);
 
             lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            lp.weight = mSmartTableProvider.getColumnWeight(i);
+            lp.weight = column.getLayoutWeight();
 
-            boolean isSortable = mSmartTableProvider.isSortable(i);
+            boolean isSortable = column.isSortable();
 
             SmartTableHeader header = new SmartTableHeader(mHeader.getContext());
             header.setLayoutParams(lp);
             header.setSortable(isSortable);
-            header.setText(mSmartTableProvider.getColumnTitle(getContext(), i));
+            header.setText(column.getTitle(getContext()));
             header.setOnHeaderClickListener(this);
+            header.setColumnInfo(column);
             if ((!defaultSortSet) && (isSortable)) {
                 header.setSortDirection(SORT_ASC);
-                mSortColumn = mSmartTableProvider.getSortColumnName(i);
+                mSortColumn = column.getSortName();
                 defaultSortSet = true;
             }
 
@@ -232,7 +237,7 @@ public class SmartTable
                 if (column > 0) {
                     sb.append(" OR ");
                 }
-                sb.append(mSmartTableProvider.getSortColumnName(column) + " LIKE ?");
+                sb.append(mSmartTableProvider.getColumn(column).getName() + " LIKE ?");
             }
             sb.append(')');
         }
@@ -292,6 +297,22 @@ public class SmartTable
             }
         }
         mLoaderManager.restartLoader(LOADER_DEFAULT, null, this);
+    }
+
+    @Override
+    public void onFilterClick(SmartTableHeader view) {
+        int column = getHeaderPosition(view);
+        view.setFilterUsed(true);
+    }
+
+    protected int getHeaderPosition(SmartTableHeader view) {
+        for (int column = 0; column < mHeader.getChildCount(); column++) {
+            SmartTableHeader header = (SmartTableHeader) mHeader.getChildAt(column);
+            if (header != view) {
+                return column;
+            }
+        }
+        return -1;
     }
 
     @Override

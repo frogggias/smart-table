@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 
 import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.commons.CSVHelper;
+import com.frogggias.smarttable.helper.SmartTableExtractor;
 import com.frogggias.smarttable.provider.SmartTableProvider;
 
 /**
@@ -54,11 +55,11 @@ public class CSVTableExporter extends TableExporter {
             Cursor cursor = params[0];
             String[] columnTitles;
             if (mContext == null) {
-                columnTitles = mProvider.getColumnTitles();
+                columnTitles = SmartTableExtractor.getColumnTitles(mProvider);
             } else {
-                columnTitles = mProvider.getColumnTitles(mContext);
+                columnTitles = SmartTableExtractor.getColumnTitles(mProvider, mContext);
             }
-            new CSVHelper().createCSVFromCursor(mFilename, cursor, mProvider.getColumnNames(), columnTitles);
+            new CSVHelper().createCSVFromCursor(mFilename, cursor, SmartTableExtractor.getColumnNames(mProvider), columnTitles);
             return null;
         }
     }

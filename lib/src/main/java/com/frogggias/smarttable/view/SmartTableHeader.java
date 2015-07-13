@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.frogggias.smarttable.R;
+import com.frogggias.smarttable.provider.SmartTableColumn;
 import com.frogggias.smarttable.utils.MaterialHelper;
 
 /**
@@ -24,8 +25,10 @@ public class SmartTableHeader extends FrameLayout {
     private static final String TAG = SmartTableHeader.class.getSimpleName();
 
     /* DATA */
+    private SmartTableColumn mColumnInfo;
     private boolean mSortable = false;
     private @SmartTable.SortDirection int mSortDir = SmartTable.SORT_NONE;
+    private boolean mFilterUsed = false;
 
     /* CONTROLLER */
     OnHeaderClickListener mListener;
@@ -34,6 +37,7 @@ public class SmartTableHeader extends FrameLayout {
     private View mView;
     private TextView mText;
     private ImageView mSort;
+    private ImageView mFilterIcon;
 
     public SmartTableHeader(Context context) {
         super(context);
@@ -56,6 +60,17 @@ public class SmartTableHeader extends FrameLayout {
         initUI();
     }
 
+    public void setColumnInfo(SmartTableColumn columnInfo) {
+        mColumnInfo = columnInfo;
+        invalidateSortIcon();
+        invalidateFilterIcon();
+    }
+
+    public void setFilterUsed(boolean value) {
+        mFilterUsed = value;
+        invalidateFilterIcon();
+    }
+
     public void setSortable(boolean sortable) {
         mSortable = sortable;
         invalidateSortIcon();
@@ -76,6 +91,7 @@ public class SmartTableHeader extends FrameLayout {
 
     private void initUI() {
         mView = LayoutInflater.from(getContext()).inflate(R.layout.header, this, false);
+
         mView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,11 +99,16 @@ public class SmartTableHeader extends FrameLayout {
             }
         });
         addView(mView);
+
         mText = (TextView) findViewById(R.id.text);
         mSort = (ImageView) findViewById(R.id.sort);
+        mFilterIcon = (ImageView) findViewById(R.id.filter);
+
+
         @ColorInt int textColor = MaterialHelper.isLight(MaterialHelper.getPrimaryColor(getContext())) ?
                 Color.BLACK : Color.WHITE;
         mSort.setColorFilter(textColor);
+        mFilterIcon.setColorFilter(textColor);
         mText.setTextColor(textColor);
 
         invalidateSortIcon();
@@ -121,6 +142,25 @@ public class SmartTableHeader extends FrameLayout {
         }
     }
 
+    private void invalidateFilterIcon() {
+        if (!mColumnInfo.isFilterable()) {
+            mFilterIcon.setVisibility(GONE);
+            mFilterIcon.setOnClickListener(null);
+            return;
+        }
+        mFilterIcon.setVisibility(VISIBLE);
+        mFilterIcon.setAlpha(mFilterUsed ? 1.0f : 0.5f);
+        mFilterIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onFilterClick(SmartTableHeader.this);
+                }
+            }
+        });
+
+    }
+
     private void sortDirectionToggle() {
         if (mSortDir == SmartTable.SORT_ASC) {
             setSortDirection(SmartTable.SORT_DESC);
@@ -145,5 +185,6 @@ public class SmartTableHeader extends FrameLayout {
 
     interface OnHeaderClickListener {
         void onHeaderClick(SmartTableHeader view);
+        void onFilterClick(SmartTableHeader view);
     }
 }

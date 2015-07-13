@@ -42,7 +42,7 @@ public class SmartTableAdapter
 
         for (int i = 0; i < mProvider.getColumnCount(); i++) {
             lp  = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            lp.weight = mProvider.getColumnWeight(i);
+            lp.weight = mProvider.getColumn(i).getLayoutWeight();
             View view = inflater.inflate(R.layout.cell, layout, false);
             view.setLayoutParams(lp);
             layout.addView(view);

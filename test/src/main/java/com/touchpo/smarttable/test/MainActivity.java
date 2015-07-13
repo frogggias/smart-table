@@ -7,18 +7,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.frogggias.smarttable.activity.SmartTableActivity;
+import com.frogggias.smarttable.filter.ColumnFilterCursorProvider;
+import com.frogggias.smarttable.filter.ColumnFilterProvider;
+import com.frogggias.smarttable.filter.SimpleColumnCursorFilterProvider;
+import com.frogggias.smarttable.provider.SmartTableColumn;
 import com.frogggias.smarttable.provider.SmartTableProvider;
 
 public class MainActivity extends SmartTableActivity {
 
     @Override
     protected SmartTableProvider getSmartTableProvider() {
+        SmartTableColumn.Factory factory = new SmartTableColumn.Factory();
+        factory.setDefaultSearchable(true);
+        factory.setDefaultSortable(true);
+
+        // Filtrable column
+        SmartTableColumn name1 = factory.create(ContactsContract.Contacts.DISPLAY_NAME);
+        ColumnFilterCursorProvider name1FilterProvider = new SimpleColumnCursorFilterProvider(
+                ContactsContract.Contacts.CONTENT_URI,
+                ContactsContract.Contacts.DISPLAY_NAME
+        );
+        name1.setFilterProvider(name1FilterProvider);
+
+        SmartTableColumn name2 = factory.create(ContactsContract.Contacts.DISPLAY_NAME);
+        name2.setSortable(false);
+
         return
             new SmartTableProvider.Builder(ContactsContract.Contacts.CONTENT_URI)
-                .setDefaultSearchable(true)
-                .setDefaultSortable(true)
-                .addColumn(ContactsContract.Contacts.DISPLAY_NAME, "name", 0, null, ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.DISPLAY_NAME)
-                    .addColumn(ContactsContract.Contacts.DISPLAY_NAME, "name-not-sort")
+                .addColumn(name1)
+                .addColumn(name2)
                 .build();
     }
 }
