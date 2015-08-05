@@ -36,7 +36,7 @@ public abstract class TableExporter {
 
     public abstract String getActionName();
 
-    public abstract String export(String filename, SmartTableProvider provider, Cursor data);
+    public abstract String export(Context context, String filename, SmartTableProvider provider, Cursor data);
 
     @Override
     public String toString() {

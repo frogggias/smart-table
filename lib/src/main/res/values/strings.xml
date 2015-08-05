@@ -1,4 +1,5 @@
 <resources>
+    <string name="ok">OK</string>
     <string name="export">Export</string>
 
     <string name="search">Search</string>
@@ -6,4 +7,6 @@
 
     <!-- CSV Exporter -->
     <string name="exporter_csv_name">Export to CSV</string>
+    <string name="exporter_csv_success">File %s was successfully saved.</string>
+    <string name="exporter_csv_open_file">Open file</string>
 </resources>

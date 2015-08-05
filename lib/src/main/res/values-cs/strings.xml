@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="ok">OK</string>
     <string name="export">Exportovat</string>
     <string name="search">Vyhledávání</string>
     <string name="search_clear">Vymazat vyhledávání</string>
 
     <string name="exporter_csv_name">Exportovat do CSV</string>
+    <string name="exporter_csv_success">Soubor %s byl úspěšně uložen.</string>
+    <string name="exporter_csv_open_file">Otevřít soubor</string>
 </resources>
