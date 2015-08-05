@@ -24,6 +24,8 @@ public class SmartTableProvider implements Serializable {
 
     public static final String COLUMN_TYPE_TEXT = "text";
 
+    private String mName;
+
     /* DATABASE DATA */
     private final String mUri;
     private SmartTableColumn[] mColumn;
@@ -109,6 +111,14 @@ public class SmartTableProvider implements Serializable {
                 .setContent(textView, cursor, getColumnName(column), query);
     }
 
+    @Override
+    public String toString() {
+        if (mName != null) {
+            return mName;
+        }
+        return super.toString();
+    }
+
     public static class Builder {
 
         private SmartTableProvider mProvider;
@@ -121,6 +131,11 @@ public class SmartTableProvider implements Serializable {
 
         public Builder(SmartTableProvider provider) {
             mProvider = provider;
+        }
+
+        public Builder setName(String name) {
+            mProvider.mName = name;
+            return this;
         }
 
         public Builder addColumn(SmartTableColumn column) {

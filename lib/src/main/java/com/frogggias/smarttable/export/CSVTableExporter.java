@@ -9,6 +9,9 @@ import com.frogggias.smarttable.commons.CSVHelper;
 import com.frogggias.smarttable.helper.SmartTableExtractor;
 import com.frogggias.smarttable.provider.SmartTableProvider;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 /**
  * Created by frogggias on 29.06.15.
  */
@@ -36,10 +39,11 @@ public class CSVTableExporter extends TableExporter {
     }
 
     @Override
-    public void export(String filename, SmartTableProvider provider, Cursor data) {
+    public String export(String filename, SmartTableProvider provider, Cursor data) {
         mProvider = provider;
-        mFilename = filename;
+        mFilename = filename + " (" + DateFormat.getTimeInstance().format(new Date()) + ")";
         new ExportTask().execute(data);
+        return filename;
     }
 
 

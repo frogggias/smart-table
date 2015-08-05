@@ -47,7 +47,6 @@ public class CSVHelper {
         }
 
         String filename = name + ".csv";
-        String path = getSharedExternalStorageDir() + "/" + filename;
         File file = new File(getSharedExternalStorageDir().getAbsolutePath() + "/" + filename);
         OutputStream outputStream = null;
         try {
