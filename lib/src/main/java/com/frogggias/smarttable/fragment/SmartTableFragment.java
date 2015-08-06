@@ -150,7 +150,7 @@ public class SmartTableFragment
                     intent.putExtra(Intent.EXTRA_TEXT, mProvider.toString());
                     intent.putExtra(Intent.EXTRA_STREAM, uri);
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    startActivity(intent);
+                    startActivity(Intent.createChooser(intent, getString(R.string.send_by_email)));
                 } catch (Exception e) {
                     Log.e(TAG, e.getLocalizedMessage());
                 }
