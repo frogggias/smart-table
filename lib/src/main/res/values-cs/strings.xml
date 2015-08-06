@@ -2,6 +2,7 @@
 <resources>
     <string name="ok">OK</string>
     <string name="export">Exportovat</string>
+    <string name="email">Odeslat e-mailem</string>
     <string name="search">Vyhledávání</string>
     <string name="search_clear">Vymazat vyhledávání</string>
 

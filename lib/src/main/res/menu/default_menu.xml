@@ -11,4 +11,9 @@
         android:title="@string/export"
         android:icon="@drawable/ic_action_export"
         app:showAsAction="ifRoom|withText" />
+
+    <item android:id="@+id/email"
+          android:title="@string/email"
+          android:icon="@drawable/ic_action_email"
+          app:showAsAction="ifRoom|withText" />
 </menu>

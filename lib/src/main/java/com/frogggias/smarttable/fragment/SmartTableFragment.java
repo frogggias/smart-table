@@ -1,9 +1,11 @@
 package com.frogggias.smarttable.fragment;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.activity.SmartTableSearchableActivity;
@@ -100,8 +103,13 @@ public class SmartTableFragment
         final int itemId = item.getItemId();
         if (itemId == R.id.export) {
             export();
+            return true;
+        } else if (itemId == R.id.email) {
+            sendByEmail();
+            return true;
         } else if (itemId == R.id.search) {
             openSearch();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -119,6 +127,38 @@ public class SmartTableFragment
             // TODO exporter chooser
         }
 
+    }
+
+    protected void sendByEmail() {
+        List<TableExporter> exporters = mSmartTable.getTableExporters();
+        TableExporter exporter;
+        if (exporters.size() == 1) {
+            exporter = exporters.get(0);
+        } else {
+            // TODO exporter chooser
+            exporter = exporters.get(0);
+        }
+
+        TableExporter.OnExportDoneListener onExportDoneListener = new TableExporter.OnExportDoneListener() {
+            @Override
+            public void onExportDone(Uri uri) {
+
+                try {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/csv");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, mProvider.toString());
+                    intent.putExtra(Intent.EXTRA_TEXT, mProvider.toString());
+                    intent.putExtra(Intent.EXTRA_STREAM, uri);
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.e(TAG, e.getLocalizedMessage());
+                }
+            }
+        };
+        exporter.setOnExportDoneListener(onExportDoneListener);
+
+        exporter.export(getActivity(), mProvider.toString(), mProvider, mSmartTable.getCursor(), true);
     }
 
     protected void openSearch() {

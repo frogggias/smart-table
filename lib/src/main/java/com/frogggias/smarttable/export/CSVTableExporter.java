@@ -45,12 +45,13 @@ public class CSVTableExporter extends TableExporter {
     }
 
     @Override
-    public String export(Context context, String filename, SmartTableProvider provider, Cursor data) {
+    public Uri export(Context context, String filename, SmartTableProvider provider, Cursor data, boolean silent) {
+        mSilent = silent;
         mContext = context;
         mProvider = provider;
         mFilename = filename + " (" + DateFormat.getDateTimeInstance().format(new Date()) + ")";
         new ExportTask().execute(data);
-        return filename;
+        return Uri.fromFile(CSVHelper.getFilePath(filename + ".csv"));
     }
 
 
@@ -76,7 +77,8 @@ public class CSVTableExporter extends TableExporter {
         @Override
         protected void onPostExecute(Uri uri) {
             super.onPostExecute(uri);
-            if ((mContext != null) && (uri != null)) {
+            exportDone(uri);
+            if (!getSilent() && (mContext != null) && (uri != null)) {
                 AlertDialog dialog = createOpenFileDialog(mContext, uri);
                 dialog.show();
             }
@@ -87,7 +89,6 @@ public class CSVTableExporter extends TableExporter {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         File file = new File(Uri.decode(uri.toString()));
-        String fileName = file.getName();
 
         String message = mContext.getString(R.string.exporter_csv_success, file.getName());
 

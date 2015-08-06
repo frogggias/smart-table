@@ -13,7 +13,7 @@ import java.io.OutputStream;
 /**
  * Created by frogggias on 16.06.15.
  */
-public class CSVHelper {
+public class CSVHelper extends ExportHelper {
 
     private static final String TAG = CSVHelper.class.getSimpleName();
 
@@ -47,7 +47,7 @@ public class CSVHelper {
         }
 
         String filename = name + ".csv";
-        File file = new File(getSharedExternalStorageDir().getAbsolutePath() + "/" + filename);
+        File file = getFilePath(filename);
         OutputStream outputStream = null;
         try {
 
@@ -85,11 +85,5 @@ public class CSVHelper {
         }
 
         return Uri.fromFile(file);
-    }
-
-    private File getSharedExternalStorageDir() {
-        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-        file.mkdirs();
-        return file;
     }
 }
