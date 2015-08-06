@@ -34,9 +34,10 @@ public class CSVHelper extends ExportHelper {
     }
 
     public Uri createCSVFromCursor(String name, Cursor cursor, String[] columnNames, String[] columnHeaders) {
-        if ((cursor == null) || (!cursor.moveToFirst())) {
+        if ((cursor == null)) {
             return null;
         }
+        cursor.moveToFirst();
 
         if (columnNames == null) {
             columnNames = cursor.getColumnNames();
