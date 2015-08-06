@@ -14,7 +14,7 @@ public class ExportHelper {
 
     public static File getSharedExternalStorageDir() {
         File file;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
             file = new File(Environment.getExternalStorageDirectory() + "/Documents");
         } else {
             file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);

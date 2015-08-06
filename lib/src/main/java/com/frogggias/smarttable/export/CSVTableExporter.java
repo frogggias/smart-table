@@ -50,6 +50,7 @@ public class CSVTableExporter extends TableExporter {
         mContext = context;
         mProvider = provider;
         mFilename = filename + " (" + DateFormat.getDateTimeInstance().format(new Date()) + ")";
+        mFilename = mFilename.replace(":","-");
         new ExportTask().execute(data);
         return Uri.fromFile(CSVHelper.getFilePath(filename + ".csv"));
     }
