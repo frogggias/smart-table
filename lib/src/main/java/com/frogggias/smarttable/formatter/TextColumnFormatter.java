@@ -40,6 +40,9 @@ public class TextColumnFormatter extends ColumnFormatter {
     @Override
     protected SpannableString getSearchString(Cursor cursor, String columnName, String searchString) {
         String text = getAsText(cursor, columnName);
+        if (text == null) {
+            text = "--";
+        }
         SpannableString spannable = new SpannableString(text);
         if ((!TextUtils.isEmpty(searchString)) && (getCanonizer().canonize(text).contains(searchString))) {
             int start = getCanonizer().canonize(text).indexOf(searchString);
