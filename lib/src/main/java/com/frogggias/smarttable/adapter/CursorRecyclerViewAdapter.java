@@ -20,6 +20,7 @@ package com.frogggias.smarttable.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.provider.BaseColumns;
 import android.support.v7.widget.RecyclerView;
 
 /**
@@ -120,7 +121,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
             if (mDataSetObserver != null) {
                 mCursor.registerDataSetObserver(mDataSetObserver);
             }
-            mRowIdColumn = newCursor.getColumnIndexOrThrow("_id");
+            mRowIdColumn = newCursor.getColumnIndexOrThrow(BaseColumns._ID);
             mDataValid = true;
             notifyDataSetChanged();
         } else {

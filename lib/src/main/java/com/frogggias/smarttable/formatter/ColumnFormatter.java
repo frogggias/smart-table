@@ -28,49 +28,25 @@ public abstract class ColumnFormatter implements Serializable {
 
 
 
-    public abstract void setContent(TextView textView, Cursor cursor, String columnName);
-    public abstract void setContent(TextView textView, Cursor cursor, String columnName, String query);
+    public abstract void setContent(TextView textView, Cursor cursor, int columnIndex);
+    public abstract void setContent(TextView textView, Cursor cursor, int columnIndex, String query);
 
     // Used internally or for data export
     @TextAlignment public abstract int getContentTextAlign();
-    public abstract String getAsText(Cursor cursor, String columnName);
+    public abstract String getAsText(Cursor cursor, int columnIndex);
 
-    protected String getString(Cursor cursor, String columnName) {
-        if (!validate(cursor, columnName)) {
-            return "";
-        }
-
-        return cursor.getString(cursor.getColumnIndex(columnName));
+    protected String getString(Cursor cursor, int columnIndex) {
+        return cursor.getString(columnIndex);
     }
 
-    protected abstract SpannableString getSearchString(Cursor cursor, String columnName, String searchString);
+    protected abstract SpannableString getSearchString(Cursor cursor, int columnIndex, String searchString);
 
-    protected long getLong(Cursor cursor, String columnName) {
-        if (!validate(cursor, columnName)) {
-            return 0L;
-        }
-
-        return cursor.getLong(cursor.getColumnIndex(columnName));
+    protected long getLong(Cursor cursor, int columnIndex) {
+        return cursor.getLong(columnIndex);
     }
 
-    protected double getDouble(Cursor cursor, String columnName) {
-        if (!validate(cursor, columnName)) {
-            return 0d;
-        }
-
-        return cursor.getDouble(cursor.getColumnIndex(columnName));
-    }
-
-    protected boolean validate(Cursor cursor, String columnName) {
-        if ((cursor == null) || (cursor.isAfterLast())) {
-            return false;
-        }
-        try {
-            cursor.getColumnIndexOrThrow(columnName);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-        return true;
+    protected double getDouble(Cursor cursor, int columnIndex) {
+        return cursor.getDouble(columnIndex);
     }
 
     protected StringCanonizer getCanonizer() {

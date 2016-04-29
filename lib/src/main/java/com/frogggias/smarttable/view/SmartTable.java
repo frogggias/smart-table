@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
@@ -36,6 +37,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+
+import static java.util.Locale.US;
 
 /**
  * Created by frogggias on 29.06.15.
@@ -216,6 +220,17 @@ public class SmartTable
         return mCursor;
     }
 
+    protected String[] getProjection() {
+        final int columnCount = mSmartTableProvider.getColumnCount();
+        String[] projection = new String[columnCount + 1];
+        for (int i = 0; i < columnCount; i++) {
+            projection[i]= mSmartTableProvider.getColumn(i).getName();
+            //projection[i]= String.format(US, "%s AS st_col_%d", mSmartTableProvider.getColumn(i).getName(), i);
+        }
+        projection[columnCount] = BaseColumns._ID;
+        return projection;
+    }
+
     protected String getSelection() {
         StringBuilder sb = new StringBuilder();
 
@@ -237,7 +252,7 @@ public class SmartTable
                 if (column > 0) {
                     sb.append(" OR ");
                 }
-                sb.append(mSmartTableProvider.getColumn(column).getName() + " LIKE ?");
+                sb.append(mSmartTableProvider.getColumn(column).getName()).append(" LIKE ?");
             }
             sb.append(')');
         }
@@ -320,7 +335,7 @@ public class SmartTable
         return new CursorLoader(
                 getContext(),
                 mSmartTableProvider.getUri(),
-                null,
+                getProjection(),
                 getSelection(),
                 getSelectionArgs(),
                 getOrder()

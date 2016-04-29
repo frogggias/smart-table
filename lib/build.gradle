@@ -38,6 +38,10 @@ android {
                 "- NAME: " + versionName + "\n----------------------------\n")
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     buildTypes {
         release {
             minifyEnabled false
