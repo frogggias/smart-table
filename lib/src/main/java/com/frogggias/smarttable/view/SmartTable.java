@@ -222,12 +222,17 @@ public class SmartTable
 
     protected String[] getProjection() {
         final int columnCount = mSmartTableProvider.getColumnCount();
-        String[] projection = new String[columnCount + 1];
+        String[] projection = new String[columnCount + 1 + mSmartTableProvider.getProjectionCount()];
         for (int i = 0; i < columnCount; i++) {
             projection[i]= mSmartTableProvider.getColumn(i).getName();
             //projection[i]= String.format(US, "%s AS st_col_%d", mSmartTableProvider.getColumn(i).getName(), i);
         }
         projection[columnCount] = BaseColumns._ID;
+        for (int i = 0; i < mSmartTableProvider.getProjectionCount(); i++) {
+            projection[i + columnCount + 1]= mSmartTableProvider.getProjection(i);
+        }
+
+        // Extra projection columns
         return projection;
     }
 

@@ -11,7 +11,10 @@ import com.frogggias.smarttable.formatter.TextColumnFormatter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +33,8 @@ public class SmartTableProvider implements Serializable {
     private final String mUri;
     private SmartTableColumn[] mColumn;
 
+    private String[] mProjection = new String[] {};
+
     private String mDefaultSelection = "";
     private String[] mDefaultSelectionArgs = new String[] {};
 
@@ -45,6 +50,18 @@ public class SmartTableProvider implements Serializable {
 
     public Uri getUri() {
         return Uri.parse(mUri);
+    }
+
+    public int getProjectionCount() {
+        return mProjection.length;
+    }
+
+    public String[] getProjection() {
+        return mProjection;
+    }
+
+    public String getProjection(int position) {
+        return mProjection[position];
     }
 
     public SmartTableColumn getColumn(int column) {
@@ -125,6 +142,8 @@ public class SmartTableProvider implements Serializable {
 
         private ArrayList<SmartTableColumn> mColumn = new ArrayList<>();
 
+        private HashSet<String> mProjection = new HashSet<>();
+
         public Builder(Uri uri) {
             mProvider = new SmartTableProvider(uri);
         }
@@ -143,6 +162,16 @@ public class SmartTableProvider implements Serializable {
             return this;
         }
 
+        public Builder addProjection(String... columns) {
+            Collections.addAll(mProjection, columns);
+            return this;
+        }
+
+        public Builder addProjection(Collection<String> columns) {
+            mProjection.addAll(columns);
+            return this;
+        }
+
         public Builder setDefaultSelection(String selection) {
             mProvider.mDefaultSelection = selection;
             return this;
@@ -157,6 +186,7 @@ public class SmartTableProvider implements Serializable {
 
         public SmartTableProvider build() {
             mProvider.mColumn = mColumn.toArray(new SmartTableColumn[mColumn.size()]);
+            mProvider.mProjection = mProjection.toArray(new String[mProjection.size()]);
             return mProvider;
         }
     }
