@@ -119,13 +119,13 @@ public class SmartTableProvider implements Serializable {
     public void formatContentTextView(TextView textView, Cursor cursor, int column) {
         getColumn(column)
                 .getFormatter()
-                .setContent(textView, cursor, column);
+                .setContent(textView, cursor, mColumn[column].getName());
     }
 
     public void formatContentTextView(TextView textView, Cursor cursor, int column, String query) {
         getColumn(column)
                 .getFormatter()
-                .setContent(textView, cursor, column, query);
+                .setContent(textView, cursor, mColumn[column].getName(), query);
     }
 
     @Override

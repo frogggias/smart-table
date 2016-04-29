@@ -18,13 +18,13 @@ public class TextColumnFormatter extends ColumnFormatter {
     private static final StyleSpan BOLD = new StyleSpan(Typeface.BOLD);
 
     @Override
-    public void setContent(TextView textView, Cursor cursor, int columnIndex) {
-        textView.setText(getString(cursor, columnIndex));
+    public void setContent(TextView textView, Cursor cursor, String columnName) {
+        textView.setText(getString(cursor, columnName));
     }
 
     @Override
-    public void setContent(TextView textView, Cursor cursor, int columnIndex, String query) {
-        textView.setText(getSearchString(cursor, columnIndex, query));
+    public void setContent(TextView textView, Cursor cursor, String columnName, String query) {
+        textView.setText(getSearchString(cursor, columnName, query));
     }
 
     @Override
@@ -33,13 +33,13 @@ public class TextColumnFormatter extends ColumnFormatter {
     }
 
     @Override
-    public String getAsText(Cursor cursor, int columnIndex) {
-        return getString(cursor, columnIndex);
+    public String getAsText(Cursor cursor, String columnName) {
+        return getString(cursor, columnName);
     }
 
     @Override
-    protected SpannableString getSearchString(Cursor cursor, int columnIndex, String searchString) {
-        String text = getAsText(cursor, columnIndex);
+    protected SpannableString getSearchString(Cursor cursor, String columnName, String searchString) {
+        String text = getAsText(cursor, columnName);
         if (text == null) {
             text = "--";
         }

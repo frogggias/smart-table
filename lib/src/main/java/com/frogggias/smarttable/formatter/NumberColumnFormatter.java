@@ -16,13 +16,13 @@ public class NumberColumnFormatter extends TextColumnFormatter {
     private NumberFormat nf = NumberFormat.getInstance();
 
     @Override
-    public void setContent(TextView textView, Cursor cursor, int columnIndex) {
-        textView.setText(nf.format(getDouble(cursor, columnIndex)));
+    public void setContent(TextView textView, Cursor cursor, String columnName) {
+        textView.setText(nf.format(getDouble(cursor, columnName)));
         textView.setGravity(Gravity.RIGHT);
     }
 
     @Override
-    public void setContent(TextView textView, Cursor cursor, int columnIndex, String query) {
-        setContent(textView, cursor, columnIndex);
+    public void setContent(TextView textView, Cursor cursor, String columnName, String query) {
+        setContent(textView, cursor, columnName);
     }
 }
