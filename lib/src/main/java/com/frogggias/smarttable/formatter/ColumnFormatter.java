@@ -31,22 +31,50 @@ public abstract class ColumnFormatter implements Serializable {
     public abstract void setContent(TextView textView, Cursor cursor, int columnIndex);
     public abstract void setContent(TextView textView, Cursor cursor, int columnIndex, String query);
 
+    public void setContent(TextView textView, Cursor cursor, String columnName) {
+        setContent(textView, cursor, cursor.getColumnIndex(columnName));
+    }
+
+    public void setContent(TextView textView, Cursor cursor, String columnName, String query) {
+        setContent(textView, cursor, cursor.getColumnIndex(columnName), query);
+    }
+
     // Used internally or for data export
     @TextAlignment public abstract int getContentTextAlign();
     public abstract String getAsText(Cursor cursor, int columnIndex);
+
+    public String getAsText(Cursor cursor, String columnName) {
+        return getAsText(cursor, cursor.getColumnIndex(columnName));
+    }
 
     protected String getString(Cursor cursor, int columnIndex) {
         return cursor.getString(columnIndex);
     }
 
+    protected String getString(Cursor cursor, String columnName) {
+        return getString(cursor, cursor.getColumnIndex(columnName));
+    }
+
     protected abstract SpannableString getSearchString(Cursor cursor, int columnIndex, String searchString);
+
+    protected SpannableString getSearchString(Cursor cursor, String columnName, String searchString) {
+        return getSearchString(cursor, cursor.getColumnIndex(columnName), searchString);
+    }
 
     protected long getLong(Cursor cursor, int columnIndex) {
         return cursor.getLong(columnIndex);
     }
 
+    protected long getLong(Cursor cursor, String columnName) {
+        return getLong(cursor, cursor.getColumnIndex(columnName));
+    }
+
     protected double getDouble(Cursor cursor, int columnIndex) {
         return cursor.getDouble(columnIndex);
+    }
+
+    protected double getDouble(Cursor cursor, String columnName) {
+        return getDouble(cursor, cursor.getColumnIndex(columnName));
     }
 
     protected StringCanonizer getCanonizer() {
