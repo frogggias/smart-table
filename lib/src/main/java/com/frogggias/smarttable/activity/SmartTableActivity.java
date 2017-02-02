@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.EditText;
 
 import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.fragment.SmartTableFragment;
@@ -35,7 +36,7 @@ public abstract class SmartTableActivity
 
     /* VIEW */
     View mSearchWrapper;
-    TextView mSearchText;
+    EditText mSearchText;
     ImageView mSearchClearIcon;
 
     protected abstract SmartTableProvider getSmartTableProvider();
@@ -60,7 +61,7 @@ public abstract class SmartTableActivity
         toolbar.setBackgroundColor(primaryColor);
 
         mSearchWrapper = findViewById(R.id.search_container);
-        mSearchText = (TextView) findViewById(R.id.search_text);
+        mSearchText = (EditText) findViewById(R.id.search_text);
         mSearchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
