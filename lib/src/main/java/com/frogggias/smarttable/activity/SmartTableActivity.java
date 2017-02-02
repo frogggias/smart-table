@@ -84,14 +84,13 @@ public abstract class SmartTableActivity
             @Override
             public void onFocusChange(View view, boolean focused) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm == null) {
+                    return;
+                }
                 if (focused) {
-                    if (imm != null) {
-                        imm.showSoftInput(mSearchText, InputMethodManager.SHOW_IMPLICIT);
-                    }
+                    imm.showSoftInput(mSearchText, InputMethodManager.SHOW_IMPLICIT);
                 } else {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
-                    }
+                    imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
                 }
             }
         });
