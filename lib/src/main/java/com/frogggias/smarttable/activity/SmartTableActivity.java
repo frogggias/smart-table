@@ -1,5 +1,6 @@
 package com.frogggias.smarttable.activity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -10,9 +11,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.fragment.SmartTableFragment;
@@ -76,6 +77,19 @@ public abstract class SmartTableActivity
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+        mSearchText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(mSearchText, InputMethodManager.SHOW_FORCED);
+                } else {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
+                }
             }
         });
 
