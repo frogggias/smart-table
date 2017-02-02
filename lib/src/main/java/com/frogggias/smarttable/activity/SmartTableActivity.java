@@ -1,5 +1,6 @@
 package com.frogggias.smarttable.activity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -10,8 +11,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.fragment.SmartTableFragment;
@@ -35,7 +37,7 @@ public abstract class SmartTableActivity
 
     /* VIEW */
     View mSearchWrapper;
-    TextView mSearchText;
+    EditText mSearchText;
     ImageView mSearchClearIcon;
 
     protected abstract SmartTableProvider getSmartTableProvider();
@@ -60,7 +62,7 @@ public abstract class SmartTableActivity
         toolbar.setBackgroundColor(primaryColor);
 
         mSearchWrapper = findViewById(R.id.search_container);
-        mSearchText = (TextView) findViewById(R.id.search_text);
+        mSearchText = (EditText) findViewById(R.id.search_text);
         mSearchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -75,6 +77,21 @@ public abstract class SmartTableActivity
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+        mSearchText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean focused) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm == null) {
+                    return;
+                }
+                if (focused) {
+                    imm.showSoftInput(mSearchText, InputMethodManager.SHOW_IMPLICIT);
+                } else {
+                    imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
+                }
             }
         });
 
