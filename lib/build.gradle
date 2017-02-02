@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'aar-link-sources'
 
 
 def siteUrl = 'https://github.com/frogggias/smart-table'      // Homepage URL of the library
