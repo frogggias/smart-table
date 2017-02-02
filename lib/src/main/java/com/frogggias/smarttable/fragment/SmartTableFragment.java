@@ -122,6 +122,7 @@ public class SmartTableFragment
     protected void export() {
         List<TableExporter> exporters = mSmartTable.getTableExporters();
         if (exporters.size() == 1) {
+            exporters.get(0).setOnExportDoneListener(null);
             exporters.get(0).export(getActivity(), mProvider.toString(), mProvider, mSmartTable.getCursor());
         } else {
             // TODO exporter chooser
