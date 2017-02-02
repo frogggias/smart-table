@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -82,13 +83,16 @@ public abstract class SmartTableActivity
 
         mSearchText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(mSearchText, InputMethodManager.SHOW_FORCED);
+            public void onFocusChange(View view, boolean focused) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (focused) {
+                    if (imm != null) {
+                        imm.showSoftInput(mSearchText, InputMethodManager.SHOW_IMPLICIT);
+                    }
                 } else {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
+                    }
                 }
             }
         });
