@@ -314,6 +314,7 @@ public class SmartTable
                 header.setSortDirection(SORT_NONE);
             } else {
                 mSortOrder = header.getSortDirection();
+                mSortColumn = mSmartTableProvider.getColumn(i).getSortName();
             }
         }
         mLoaderManager.restartLoader(LOADER_DEFAULT, null, this);

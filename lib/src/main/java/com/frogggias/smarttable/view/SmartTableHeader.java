@@ -132,7 +132,7 @@ public class SmartTableHeader extends FrameLayout {
             switch (mSortDir) {
                 case SmartTable.SORT_DESC:
                 case SmartTable.SORT_ASC:
-                    mSort.setRotation(mSortDir == SmartTable.SORT_ASC ? 0f : 180f);
+                    mSort.setRotation(mSortDir == SmartTable.SORT_ASC ? 180f : 0f);
                     mSort.setVisibility(VISIBLE);
                     mText.setTypeface(null, Typeface.BOLD);
                     break;
