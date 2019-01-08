@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:locale="vi"
+    tools:ignore="MissingTranslation">
+    <string name="ok">OK</string>
+    <string name="export">Xuất</string>
+
+    <string name="search">Tìm kiếm</string>
+    <string name="search_clear">Xóa truy vấn tìm kiếm</string>
+
+    <!-- CSV Exporter -->
+    <string name="exporter_csv_name">Xuất ra định dạng CSV</string>
+    <string name="exporter_csv_success">Lưu file %s thành công.</string>
+    <string name="exporter_csv_open_file">Mở file</string>
+
+    <string name="send_by_email">Gửi bằng email…</string>
+</resources>

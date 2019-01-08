@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"
+    tools:locale="pl"
+    tools:ignore="MissingTranslation">
+    <string name="ok">TAK</string>
+    <string name="export">Eksportuj</string>
+    <string name="email">Wyślij poprzez e-mail</string>
+    <string name="search">Wyszukiwanie</string>
+    <string name="search_clear">Skasuj wyszukiwanie</string>
+
+    <string name="exporter_csv_name">Eksportuj do pliku CSV</string>
+    <string name="exporter_csv_success">Plik %s został pomyślnie zapisany</string>
+    <string name="exporter_csv_open_file">Otwórz plik</string>
+
+    <string name="send_by_email">Wyślij pocztą e-mail…</string>
+</resources>

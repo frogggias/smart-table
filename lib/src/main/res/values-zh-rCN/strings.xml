@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:locale="zh-rCN"
+    tools:ignore="MissingTranslation">
+    <string name="ok">确定</string>
+    <string name="export">导出</string>
+
+    <string name="search">搜索</string>
+    <string name="search_clear">清除搜索查询</string>
+
+    <!-- CSV Exporter -->
+    <string name="exporter_csv_name">导出至 CSV</string>
+    <string name="exporter_csv_success">文件%s保存成功。</string>
+    <string name="exporter_csv_open_file">打开文件</string>
+
+    <string name="send_by_email">通过电子邮件发送…</string>
+</resources>
