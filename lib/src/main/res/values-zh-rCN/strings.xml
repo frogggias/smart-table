@@ -5,7 +5,7 @@
     tools:ignore="MissingTranslation">
     <string name="ok">确定</string>
     <string name="export">导出</string>
-
+    <string name="email">通过电子邮件发送</string>
     <string name="search">搜索</string>
     <string name="search_clear">清除搜索查询</string>
 

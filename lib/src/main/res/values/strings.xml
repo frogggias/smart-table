@@ -1,7 +1,7 @@
 <resources>
     <string name="ok">OK</string>
     <string name="export">Export</string>
-
+    <string name="email">Send by email</string>
     <string name="search">Search</string>
     <string name="search_clear">Clear search query</string>
 
