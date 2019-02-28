@@ -10,5 +10,5 @@
     <string name="exporter_csv_success">Soubor %s byl úspěšně uložen.</string>
     <string name="exporter_csv_open_file">Otevřít soubor</string>
 
-    <string name="send_by_email">Odeslat emailem…</string>
+    <string name="send_by_email">Odeslat e-mailem…</string>
 </resources>

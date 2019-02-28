@@ -5,7 +5,7 @@
     tools:ignore="MissingTranslation">
     <string name="ok">OK</string>
     <string name="export">Xuất</string>
-
+    <string name="email">Gửi bằng email</string>
     <string name="search">Tìm kiếm</string>
     <string name="search_clear">Xóa truy vấn tìm kiếm</string>
 
