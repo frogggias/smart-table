@@ -2,7 +2,6 @@ package com.frogggias.smarttable.filter;
 
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.BaseColumns;
 
 import java.io.Serializable;
 

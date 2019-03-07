@@ -2,6 +2,7 @@ package com.frogggias.smarttable.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,9 @@ public class SmartTableAdapter
         mProvider = provider;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.row, viewGroup, false);
         layout.setClickable(mOnItemClickListener != null);

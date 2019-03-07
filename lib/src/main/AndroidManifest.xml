@@ -1,4 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.frogggias.smarttable">
 
+    <application>
+        <provider
+            android:name="com.frogggias.smarttable.provider.SmartTableFileProvider"
+            android:authorities="${applicationId}.com.frogggias.smarttable.provider"
+            android:enabled="true"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/filepaths" />
+    </application>
 </manifest>

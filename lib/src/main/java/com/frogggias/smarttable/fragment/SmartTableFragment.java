@@ -1,5 +1,7 @@
 package com.frogggias.smarttable.fragment;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -7,8 +9,10 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,15 +21,16 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.activity.SmartTableSearchableActivity;
+import com.frogggias.smarttable.export.ExportFragment;
 import com.frogggias.smarttable.export.TableExporter;
 import com.frogggias.smarttable.provider.SmartTableProvider;
 import com.frogggias.smarttable.utils.MaterialHelper;
 import com.frogggias.smarttable.view.SmartTable;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -38,6 +43,7 @@ public class SmartTableFragment
     private static final String TAG = SmartTableFragment.class.getSimpleName();
 
     private static final String ARG_PROVIDER = "provider";
+    private static final String TAG_EXPORT_FRAGMENT = "export-fragment";
 
     /* DATA */
     private SmartTableProvider mProvider;
@@ -46,7 +52,7 @@ public class SmartTableFragment
     private SmartTable mSmartTable;
     private MenuItem mSearchMenuItem;
 
-    public static final SmartTableFragment newInstance(SmartTableProvider mProvider) {
+    public static SmartTableFragment newInstance(SmartTableProvider mProvider) {
         SmartTableFragment fragment = new SmartTableFragment();
 
         Bundle args = new Bundle();
@@ -65,9 +71,9 @@ public class SmartTableFragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_smarttable, container, false);
-        mSmartTable = (SmartTable) view.findViewById(R.id.table);
+        mSmartTable = view.findViewById(R.id.table);
         mSmartTable.setTableProvider(mProvider);
         mSmartTable.setLoaderManager(getLoaderManager());
         mSmartTable.setOnRowClickedListener(this);
@@ -121,14 +127,73 @@ public class SmartTableFragment
 
     protected void export() {
         List<TableExporter> exporters = mSmartTable.getTableExporters();
+        TableExporter exporter;
         if (exporters.size() == 1) {
-            exporters.get(0).setOnExportDoneListener(null);
-            exporters.get(0).export(getActivity(), mProvider.toString(), mProvider, mSmartTable.getCursor());
+            exporter = exporters.get(0);
         } else {
             // TODO exporter chooser
+            exporter = exporters.get(0);
         }
 
+        TableExporter.Data data = new TableExporter.Data(getActivity(), mProvider.toString(), mProvider, mSmartTable.getCursor());
+        ExportFragment exportFragment = ExportFragment.newInstance(exporter, data);
+        ExportFragment.OnExportCompletedListener listener = new ExportFragment.OnExportCompletedListener() {
+            @Override
+            public void onExportCompleted(Uri uri) {
+                Fragment exportFragment = getChildFragmentManager().findFragmentByTag(TAG_EXPORT_FRAGMENT);
+                if (exportFragment != null) {
+                    getChildFragmentManager().beginTransaction()
+                            .remove(exportFragment)
+                            .commit();
+                }
+                Context context = getContext();
+                if (context == null || uri == null) {
+                    return;
+                }
+                createOpenFileDialog(context, uri).show();
+            }
+        };
+        exportFragment.setListener(listener);
+        getChildFragmentManager().beginTransaction()
+                .add(exportFragment, TAG_EXPORT_FRAGMENT)
+                .commit();
     }
+
+    private AlertDialog createOpenFileDialog(final Context context, final Uri uri) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        File file = new File(Uri.decode(uri.toString()));
+
+        String message = context.getString(R.string.exporter_csv_success, file.getName());
+
+        builder.setMessage(message);
+        builder.setPositiveButton(R.string.exporter_csv_open_file, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                openFile(context, uri);
+            }
+        });
+        builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        return builder.create();
+    }
+
+    private void openFile(Context context, Uri uri) {
+        if (context != null) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "text/csv");
+            context.startActivity(Intent.createChooser(intent, context.getString(R.string.exporter_csv_open_file)));
+        }
+    }
+
+
+
+    // TODO, following!
 
     protected void sendByEmail() {
         List<TableExporter> exporters = mSmartTable.getTableExporters();
@@ -157,9 +222,10 @@ public class SmartTableFragment
                 }
             }
         };
-        exporter.setOnExportDoneListener(onExportDoneListener);
 
-        exporter.export(getActivity(), mProvider.toString(), mProvider, mSmartTable.getCursor(), true);
+        // TODO this should be silent
+        TableExporter.Data data = new TableExporter.Data(getActivity(), mProvider.toString(), mProvider, mSmartTable.getCursor());
+        exporter.export(data);
     }
 
     protected void openSearch() {

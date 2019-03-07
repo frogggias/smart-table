@@ -2,7 +2,6 @@ package com.frogggias.smarttable.commons;
 
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedOutputStream;
