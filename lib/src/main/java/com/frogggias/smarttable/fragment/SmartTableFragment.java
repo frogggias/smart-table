@@ -162,6 +162,8 @@ public class SmartTableFragment
     private AlertDialog createOpenFileDialog(final Context context, final Uri uri) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
+
+        // TODO here also maybe?
         File file = new File(Uri.decode(uri.toString()));
 
         String message = context.getString(R.string.exporter_csv_success, file.getName());
@@ -190,9 +192,6 @@ public class SmartTableFragment
             context.startActivity(Intent.createChooser(intent, context.getString(R.string.exporter_csv_open_file)));
         }
     }
-
-
-
     // TODO, following!
 
     protected void sendByEmail() {

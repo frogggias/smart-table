@@ -8,8 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import com.frogggias.smarttable.fragment.SmartTableFragment;
-
 import java.lang.ref.WeakReference;
 
 /**
@@ -63,10 +61,6 @@ public class ExportFragment extends Fragment {
     @Nullable
     private OnExportCompletedListener getListener() {
         return mListener == null ? null : mListener.get();
-    }
-
-    private SmartTableFragment getSmartTableFragment() {
-        return (SmartTableFragment) getTargetFragment();
     }
 
     public interface OnExportCompletedListener {

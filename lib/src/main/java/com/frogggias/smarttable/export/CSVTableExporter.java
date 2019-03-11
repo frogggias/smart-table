@@ -1,20 +1,14 @@
 package com.frogggias.smarttable.export;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
-import android.support.v7.app.AlertDialog;
 
 import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.commons.CSVHelper;
 import com.frogggias.smarttable.helper.SmartTableExtractor;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
 

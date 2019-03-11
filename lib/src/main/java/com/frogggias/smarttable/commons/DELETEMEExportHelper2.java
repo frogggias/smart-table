@@ -8,9 +8,9 @@ import java.io.File;
 /**
  * Created by frogggias on 05.08.15.
  */
-public class ExportHelper {
+public class DELETEMEExportHelper2 {
 
-    private static final String TAG = ExportHelper.class.getSimpleName();
+    private static final String TAG = DELETEMEExportHelper2.class.getSimpleName();
 
     public static File getSharedExternalStorageDir() {
         File file;

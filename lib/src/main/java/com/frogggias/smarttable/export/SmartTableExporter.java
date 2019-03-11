@@ -1,5 +1,6 @@
 package com.frogggias.smarttable.export;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.frogggias.smarttable.ExporterNotInitializedException;
@@ -29,6 +30,16 @@ public class SmartTableExporter {
         if (sExportFileFactory == null) {
             throw new ExporterNotInitializedException();
         }
-        return new File("");
+
+        return sExportFileFactory.getExportFile(filename);
+    }
+
+    @NonNull
+    public static Uri getExportUri(@NonNull File file) {
+        if (sExportFileFactory == null) {
+            throw new ExporterNotInitializedException();
+        }
+
+        return sExportFileFactory.getExportUri(file);
     }
 }

@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import com.frogggias.smarttable.export.SmartTableExporter;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,7 +15,7 @@ import java.io.OutputStream;
 /**
  * Created by frogggias on 16.06.15.
  */
-public class CSVHelper extends ExportHelper {
+public class CSVHelper {
 
     private static final String TAG = CSVHelper.class.getSimpleName();
 
@@ -48,10 +50,9 @@ public class CSVHelper extends ExportHelper {
         }
 
         String filename = name + ".csv";
-        File file = getFilePath(filename);
+        File file = SmartTableExporter.getExportFile(filename);
         OutputStream outputStream = null;
         try {
-
             outputStream = new BufferedOutputStream(new FileOutputStream(file));
             // Write headers
             for(int i = 0; i < columnHeaders.length; i++) {
@@ -87,6 +88,6 @@ public class CSVHelper extends ExportHelper {
             }
         }
 
-        return Uri.fromFile(file);
+        return SmartTableExporter.getExportUri(file);
     }
 }
