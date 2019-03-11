@@ -1,8 +1,10 @@
 package com.frogggias.smarttable.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +47,9 @@ public class SmartTableFragment
 
     private static final String ARG_PROVIDER = "provider";
     private static final String TAG_EXPORT_FRAGMENT = "export-fragment";
+
+    private static final int REQUEST_CODE_STORAGE_EXPORT = 101;
+    private static final int REQUEST_CODE_STORAGE_EMAIL = 102;
 
     /* DATA */
     private SmartTableProvider mProvider;
@@ -125,7 +131,20 @@ public class SmartTableFragment
         Log.d(TAG, "Row clicked: " + cursor.toString());
     }
 
+    private boolean hasExternalStoragePermission(@NonNull Context context) {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
     protected void export() {
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+        if (!hasExternalStoragePermission(context)) {
+            requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_CODE_STORAGE_EXPORT);
+            return;
+        }
         List<TableExporter> exporters = mSmartTable.getTableExporters();
         TableExporter exporter;
         if (exporters.size() == 1) {
@@ -196,6 +215,14 @@ public class SmartTableFragment
     // TODO, following!
 
     protected void sendByEmail() {
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+        if (!hasExternalStoragePermission(context)) {
+            requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_CODE_STORAGE_EMAIL);
+            return;
+        }
         List<TableExporter> exporters = mSmartTable.getTableExporters();
         TableExporter exporter;
         if (exporters.size() == 1) {
@@ -232,6 +259,33 @@ public class SmartTableFragment
         if (getActivity() instanceof SmartTableSearchableActivity) {
             ((SmartTableSearchableActivity) getActivity()).openSearch();
             mSearchMenuItem.setVisible(false);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_STORAGE_EXPORT:
+            case REQUEST_CODE_STORAGE_EMAIL:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    proceedWithPermissionGranted(requestCode);
+                    return;
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+        // TODO consider hiding items from options menu when user choose not to ask them anymore.
+    }
+
+    private void proceedWithPermissionGranted(int originalRequestCode) {
+        switch (originalRequestCode) {
+            case REQUEST_CODE_STORAGE_EXPORT:
+                export();
+                break;
+            case REQUEST_CODE_STORAGE_EMAIL:
+                sendByEmail();
+                break;
         }
     }
 
