@@ -187,8 +187,9 @@ public class SmartTableFragment
 
     private void openFile(Context context, Uri uri) {
         if (context != null) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, "text/csv");
+            Intent intent = new Intent(Intent.ACTION_VIEW)
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    .setDataAndType(uri, "text/csv");
             context.startActivity(Intent.createChooser(intent, context.getString(R.string.exporter_csv_open_file)));
         }
     }
@@ -214,7 +215,7 @@ public class SmartTableFragment
                     intent.putExtra(Intent.EXTRA_SUBJECT, mProvider.toString());
                     intent.putExtra(Intent.EXTRA_TEXT, mProvider.toString());
                     intent.putExtra(Intent.EXTRA_STREAM, uri);
-                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivity(Intent.createChooser(intent, getString(R.string.send_by_email)));
                 } catch (Exception e) {
                     Log.e(TAG, e.getLocalizedMessage());
