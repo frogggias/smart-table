@@ -46,11 +46,14 @@ public class SmartTableFragment
     private static final String TAG = SmartTableFragment.class.getSimpleName();
 
     private static final String ARG_PROVIDER = "provider";
+
     private static final String TAG_EXPORT_FRAGMENT = "export-fragment";
     private static final String TAG_EMAIL_EXPORT_FRAGMENT = "email-export-fragment";
 
     private static final int REQUEST_CODE_STORAGE_EXPORT = 101;
     private static final int REQUEST_CODE_STORAGE_EMAIL = 102;
+
+    private static final String PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
     /* DATA */
     private SmartTableProvider mProvider;
@@ -132,18 +135,13 @@ public class SmartTableFragment
         Log.d(TAG, "Row clicked: " + cursor.toString());
     }
 
-    private boolean hasExternalStoragePermission(@NonNull Context context) {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED;
-    }
-
     protected void export() {
         Context context = getContext();
         if (context == null) {
             return;
         }
-        if (!hasExternalStoragePermission(context)) {
-            requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_CODE_STORAGE_EXPORT);
+        if (isStoragePermissionMissing(context)) {
+            requestStoragePermission(REQUEST_CODE_STORAGE_EXPORT, shouldShowRequestPermissionRationale(PERMISSION));
             return;
         }
         List<TableExporter> exporters = mSmartTable.getTableExporters();
@@ -211,8 +209,8 @@ public class SmartTableFragment
         if (context == null) {
             return;
         }
-        if (!hasExternalStoragePermission(context)) {
-            requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_CODE_STORAGE_EMAIL);
+        if (isStoragePermissionMissing(context)) {
+            requestStoragePermission(REQUEST_CODE_STORAGE_EMAIL, shouldShowRequestPermissionRationale(PERMISSION));
             return;
         }
         List<TableExporter> exporters = mSmartTable.getTableExporters();
@@ -254,6 +252,8 @@ public class SmartTableFragment
         }
     }
 
+    /* PERMISSIONS RELATED STUFF */
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -262,16 +262,51 @@ public class SmartTableFragment
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     proceedWithPermissionGranted(requestCode);
                     return;
-                } else if (shouldShowRequestPermissionRationale(permissions[0])) {
-                    // TODO show dialog
                 } else {
-                    // TODO what here?
+                    // user either denied, so when he clicks reports again, an explaining dialog will be shown, or
+                    // selected 'Do not bother me with the permission again', so we won't
                 }
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-        // TODO consider hiding items from options menu when user choose not to ask them anymore.
+    }
+
+    private boolean isStoragePermissionMissing(@NonNull Context context) {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestStoragePermission(int requestCode, boolean shouldDisplayExplanation) {
+        if (!shouldDisplayExplanation) {
+            requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, requestCode);
+        } else {
+            showStoragePermissionExplanationDialog(requestCode);
+        }
+    }
+
+    private void showStoragePermissionExplanationDialog(final int requestCode) {
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.storage_permission_dialog_title)
+                .setMessage(R.string.storage_permission_dialog_message)
+                .setPositiveButton(R.string.storage_permission_dialog_message, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        requestStoragePermission(requestCode, false);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     private void proceedWithPermissionGranted(int originalRequestCode) {

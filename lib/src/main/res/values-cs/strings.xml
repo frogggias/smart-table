@@ -11,4 +11,7 @@
     <string name="exporter_csv_open_file">Otevřít soubor</string>
 
     <string name="send_by_email">Odeslat e-mailem…</string>
+    <string name="storage_permission_dialog_title">Přístup k úložišti</string>
+    <string name="storage_permission_dialog_message">Pro uložení exportu jee potřeba povolit přístup k externímu úložišti</string>
+    <string name="storage_permission_dialog_allow">Povolit</string>
 </resources>
