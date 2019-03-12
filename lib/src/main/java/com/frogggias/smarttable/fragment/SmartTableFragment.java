@@ -293,7 +293,7 @@ public class SmartTableFragment
         new AlertDialog.Builder(context)
                 .setTitle(R.string.storage_permission_dialog_title)
                 .setMessage(R.string.storage_permission_dialog_message)
-                .setPositiveButton(R.string.storage_permission_dialog_message, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.storage_permission_dialog_allow, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
