@@ -38,11 +38,6 @@ public class ExportFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         if (mExportTask == null) {
             return;
         }
