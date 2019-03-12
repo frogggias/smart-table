@@ -47,6 +47,7 @@ public class SmartTableFragment
 
     private static final String ARG_PROVIDER = "provider";
     private static final String TAG_EXPORT_FRAGMENT = "export-fragment";
+    private static final String TAG_EMAIL_EXPORT_FRAGMENT = "email-export-fragment";
 
     private static final int REQUEST_CODE_STORAGE_EXPORT = 101;
     private static final int REQUEST_CODE_STORAGE_EMAIL = 102;
@@ -173,9 +174,7 @@ public class SmartTableFragment
             }
         };
         exportFragment.setListener(listener);
-        getChildFragmentManager().beginTransaction()
-                .add(exportFragment, TAG_EXPORT_FRAGMENT)
-                .commit();
+        performExportIfPossible(exportFragment, TAG_EXPORT_FRAGMENT);
     }
 
     private AlertDialog createOpenFileDialog(final Context context, final Uri uri) {
@@ -251,9 +250,18 @@ public class SmartTableFragment
             }
         };
         exportFragment.setListener(listener);
-        getChildFragmentManager().beginTransaction()
-                .add(exportFragment, TAG_EXPORT_FRAGMENT)
-                .commit();
+        performExportIfPossible(exportFragment, TAG_EMAIL_EXPORT_FRAGMENT);
+    }
+
+    private void performExportIfPossible(@NonNull ExportFragment fragment, String tag) {
+        Fragment existing = getChildFragmentManager().findFragmentByTag(tag);
+        if (existing == null) {
+            getChildFragmentManager().beginTransaction()
+                    .add(fragment, tag)
+                    .commit();
+        } else {
+            Log.d(TAG, "Export of kind '" + tag + "' is already in progress");
+        }
     }
 
     protected void openSearch() {

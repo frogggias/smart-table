@@ -23,16 +23,6 @@ public class CSVTableExporter extends TableExporter {
         super();
     }
 
-    public CSVTableExporter(Context context) {
-        this();
-        mContext = context;
-    }
-
-    @Override
-    public boolean hasSettings() {
-        return false;
-    }
-
     @Override
     public String getActionName() {
         return "Export to CSV";
@@ -41,17 +31,15 @@ public class CSVTableExporter extends TableExporter {
     @Override
     @WorkerThread
     public Uri export(@NonNull Data data) {
-        mContext = data.context;
-        mProvider = data.provider;
-        mFilename = data.baseFileName + " (" + DateFormat.getDateTimeInstance().format(new Date()) + ")";
-        mFilename = mFilename.replace(":","-");
+        String filename = (data.baseFileName + " (" + DateFormat.getDateTimeInstance().format(new Date()) + ")")
+                .replace(":","-");
         String[] columnTitles;
-        if (mContext == null) {
-            columnTitles = SmartTableExtractor.getColumnTitles(mProvider);
+        if (data.context == null) {
+            columnTitles = SmartTableExtractor.getColumnTitles(data.provider);
         } else {
-            columnTitles = SmartTableExtractor.getColumnTitles(mProvider, mContext);
+            columnTitles = SmartTableExtractor.getColumnTitles(data.provider, data.context);
         }
-        return new CSVHelper().createCSVFromCursor(mFilename, data.data, SmartTableExtractor.getColumnNames(mProvider), columnTitles);
+        return new CSVHelper().createCSVFromCursor(filename, data.data, SmartTableExtractor.getColumnNames(data.provider), columnTitles);
     }
 
 

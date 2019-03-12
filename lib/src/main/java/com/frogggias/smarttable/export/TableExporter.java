@@ -29,24 +29,6 @@ public abstract class TableExporter {
         }
     }
 
-    protected Context mContext;
-    protected SmartTableProvider mProvider;
-    protected String mFilename;
-
-    public TableExporter() {
-
-    }
-
-    public void setFilename(String name) {
-        mFilename = name;
-    }
-
-    public void setSmartTableProvider(SmartTableProvider provider) {
-        mProvider = provider;
-    }
-
-    public abstract boolean hasSettings();
-
     public String getActionName(Context context) {
         return getActionName();
     }
@@ -60,9 +42,5 @@ public abstract class TableExporter {
     @Override
     public String toString() {
         return getActionName();
-    }
-
-    public interface OnExportDoneListener {
-        void onExportDone(Uri uri);
     }
 }

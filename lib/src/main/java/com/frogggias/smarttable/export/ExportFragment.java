@@ -46,6 +46,15 @@ public class ExportFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mExportTask != null) {
+            mExportTask.cancel(true);
+            mExportTask = null;
+        }
+    }
+
     public void onExportCompleted(Uri uri) {
         OnExportCompletedListener listener = getListener();
         if (listener != null) {
