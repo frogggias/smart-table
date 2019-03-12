@@ -212,7 +212,6 @@ public class SmartTableFragment
             context.startActivity(Intent.createChooser(intent, context.getString(R.string.exporter_csv_open_file)));
         }
     }
-    // TODO, following!
 
     protected void sendByEmail() {
         Context context = getContext();
@@ -232,9 +231,11 @@ public class SmartTableFragment
             exporter = exporters.get(0);
         }
 
-        TableExporter.OnExportDoneListener onExportDoneListener = new TableExporter.OnExportDoneListener() {
+        TableExporter.Data data = new TableExporter.Data(getActivity(), mProvider.toString(), mProvider, mSmartTable.getCursor());
+        ExportFragment exportFragment = ExportFragment.newInstance(exporter, data);
+        ExportFragment.OnExportCompletedListener listener = new ExportFragment.OnExportCompletedListener() {
             @Override
-            public void onExportDone(Uri uri) {
+            public void onExportCompleted(Uri uri) {
 
                 try {
                     Intent intent = new Intent(Intent.ACTION_SEND);
@@ -249,10 +250,10 @@ public class SmartTableFragment
                 }
             }
         };
-
-        // TODO this should be silent
-        TableExporter.Data data = new TableExporter.Data(getActivity(), mProvider.toString(), mProvider, mSmartTable.getCursor());
-        exporter.export(data);
+        exportFragment.setListener(listener);
+        getChildFragmentManager().beginTransaction()
+                .add(exportFragment, TAG_EXPORT_FRAGMENT)
+                .commit();
     }
 
     protected void openSearch() {
@@ -270,6 +271,10 @@ public class SmartTableFragment
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     proceedWithPermissionGranted(requestCode);
                     return;
+                } else if (shouldShowRequestPermissionRationale(permissions[0])) {
+                    // TODO show dialog
+                } else {
+                    // TODO what here?
                 }
                 break;
             default:
