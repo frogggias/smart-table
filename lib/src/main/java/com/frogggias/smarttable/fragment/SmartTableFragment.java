@@ -156,16 +156,9 @@ public class SmartTableFragment
         }
 
         TableExporter.Data data = new TableExporter.Data(getActivity(), mProvider.toString(), mProvider, mSmartTable.getCursor());
-        ExportFragment exportFragment = ExportFragment.newInstance(exporter, data);
         ExportFragment.OnExportCompletedListener listener = new ExportFragment.OnExportCompletedListener() {
             @Override
             public void onExportCompleted(Uri uri) {
-                Fragment exportFragment = getChildFragmentManager().findFragmentByTag(TAG_EXPORT_FRAGMENT);
-                if (exportFragment != null) {
-                    getChildFragmentManager().beginTransaction()
-                            .remove(exportFragment)
-                            .commit();
-                }
                 Context context = getContext();
                 if (context == null || uri == null) {
                     return;
@@ -173,8 +166,9 @@ public class SmartTableFragment
                 createOpenFileDialog(context, uri).show();
             }
         };
-        exportFragment.setListener(listener);
-        performExportIfPossible(exportFragment, TAG_EXPORT_FRAGMENT);
+        ExportFragment.newInstance(exporter, data, this)
+                .setListener(listener)
+                .export(TAG_EXPORT_FRAGMENT);
     }
 
     private AlertDialog createOpenFileDialog(final Context context, final Uri uri) {
@@ -231,7 +225,6 @@ public class SmartTableFragment
         }
 
         TableExporter.Data data = new TableExporter.Data(getActivity(), mProvider.toString(), mProvider, mSmartTable.getCursor());
-        ExportFragment exportFragment = ExportFragment.newInstance(exporter, data);
         ExportFragment.OnExportCompletedListener listener = new ExportFragment.OnExportCompletedListener() {
             @Override
             public void onExportCompleted(Uri uri) {
@@ -249,19 +242,9 @@ public class SmartTableFragment
                 }
             }
         };
-        exportFragment.setListener(listener);
-        performExportIfPossible(exportFragment, TAG_EMAIL_EXPORT_FRAGMENT);
-    }
-
-    private void performExportIfPossible(@NonNull ExportFragment fragment, String tag) {
-        Fragment existing = getChildFragmentManager().findFragmentByTag(tag);
-        if (existing == null) {
-            getChildFragmentManager().beginTransaction()
-                    .add(fragment, tag)
-                    .commit();
-        } else {
-            Log.d(TAG, "Export of kind '" + tag + "' is already in progress");
-        }
+        ExportFragment.newInstance(exporter, data, this)
+                .setListener(listener)
+                .export(TAG_EMAIL_EXPORT_FRAGMENT);
     }
 
     protected void openSearch() {
