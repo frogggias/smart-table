@@ -15,4 +15,7 @@
     <string name="exporter_csv_open_file">Datei öffnen</string>
 
     <string name="send_by_email">Per E-Mail versenden…</string>
+    <string name="storage_permission_dialog_message">Um den Export zu speichern, müssen wir auf den Speicher Ihres Geräts zugreifen.</string>
+    <string name="storage_permission_dialog_allow">ermöglichen</string>
+    <string name="storage_permission_dialog_title">Zugriff auf externen Speicher</string>
 </resources>

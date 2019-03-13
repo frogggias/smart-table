@@ -55,14 +55,14 @@ public abstract class SmartTableActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smarttable);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         @ColorInt int primaryColor = MaterialHelper.getPrimaryColor(this);
         @ColorInt int textColor = MaterialHelper.isLight(primaryColor) ? Color.BLACK : Color.WHITE;
         toolbar.setBackgroundColor(primaryColor);
 
         mSearchWrapper = findViewById(R.id.search_container);
-        mSearchText = (EditText) findViewById(R.id.search_text);
+        mSearchText = findViewById(R.id.search_text);
         mSearchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -95,7 +95,7 @@ public abstract class SmartTableActivity
             }
         });
 
-        mSearchClearIcon = (ImageView) findViewById(R.id.search_clear);
+        mSearchClearIcon = findViewById(R.id.search_clear);
         mSearchClearIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,8 +121,8 @@ public abstract class SmartTableActivity
     }
 
     protected void textChanged(String text) {
-        if (mContentFragment instanceof SmartTableSearchable) {
-            ((SmartTableSearchable) mContentFragment).setSearchQuery(text);
+        if (mContentFragment != null) {
+            mContentFragment.setSearchQuery(text);
         }
     }
 
@@ -156,8 +156,8 @@ public abstract class SmartTableActivity
     private void closeSearch() {
         searchClear();
         mSearchWrapper.setVisibility(View.GONE);
-        if (mContentFragment instanceof SmartTableSearchable) {
-            ((SmartTableSearchable) mContentFragment).cancelSearch();
+        if (mContentFragment != null) {
+            mContentFragment.cancelSearch();
         }
         if (!mHasHomeActionBarButton) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);

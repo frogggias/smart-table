@@ -1,13 +1,10 @@
 package com.frogggias.smarttable.provider;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.StringRes;
 import android.widget.TextView;
 
 import com.frogggias.smarttable.formatter.ColumnFormatter;
-import com.frogggias.smarttable.formatter.TextColumnFormatter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,8 +12,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by frogggias on 29.06.15.

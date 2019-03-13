@@ -15,4 +15,7 @@
     <string name="exporter_csv_open_file">Mở file</string>
 
     <string name="send_by_email">Gửi bằng email…</string>
+    <string name="storage_permission_dialog_message">Để lưu xuất, chúng tôi cần truy cập vào bộ nhớ của thiết bị.</string>
+    <string name="storage_permission_dialog_allow">Cho phép</string>
+    <string name="storage_permission_dialog_title">Truy cập bộ nhớ ngoài</string>
 </resources>
