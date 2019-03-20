@@ -1,14 +1,9 @@
 package com.touchpo.smarttable.test;
 
 import android.provider.ContactsContract;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.frogggias.smarttable.activity.SmartTableActivity;
 import com.frogggias.smarttable.filter.ColumnFilterCursorProvider;
-import com.frogggias.smarttable.filter.ColumnFilterProvider;
 import com.frogggias.smarttable.filter.SimpleColumnCursorFilterProvider;
 import com.frogggias.smarttable.provider.SmartTableColumn;
 import com.frogggias.smarttable.provider.SmartTableProvider;

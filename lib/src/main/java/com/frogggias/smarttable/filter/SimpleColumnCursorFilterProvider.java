@@ -2,7 +2,6 @@ package com.frogggias.smarttable.filter;
 
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 
 /**
  * Created by frogggias on 13.07.15.

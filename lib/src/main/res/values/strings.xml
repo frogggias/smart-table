@@ -11,4 +11,7 @@
     <string name="exporter_csv_open_file">Open file</string>
 
     <string name="send_by_email">Send by email…</string>
+    <string name="storage_permission_dialog_title">External storage access</string>
+    <string name="storage_permission_dialog_message">In order to save the export, we need to access your device\'s storage.</string>
+    <string name="storage_permission_dialog_allow">Allow</string>
 </resources>

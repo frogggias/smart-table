@@ -25,10 +25,10 @@ import com.frogggias.smarttable.R;
 import com.frogggias.smarttable.adapter.SmartTableAdapter;
 import com.frogggias.smarttable.canonizer.SimpleStringCanonizer;
 import com.frogggias.smarttable.canonizer.StringCanonizer;
-import com.frogggias.smarttable.provider.SmartTableColumn;
-import com.frogggias.smarttable.provider.SmartTableProvider;
 import com.frogggias.smarttable.export.CSVTableExporter;
 import com.frogggias.smarttable.export.TableExporter;
+import com.frogggias.smarttable.provider.SmartTableColumn;
+import com.frogggias.smarttable.provider.SmartTableProvider;
 import com.frogggias.smarttable.utils.MaterialHelper;
 import com.frogggias.smarttable.view.support.DividerItemDecoration;
 
@@ -36,10 +36,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-
-import static java.util.Locale.US;
 
 /**
  * Created by frogggias on 29.06.15.
@@ -128,8 +126,8 @@ public class SmartTable
                 .inflate(R.layout.table, this, true);
 
         mHeaderWrapper = findViewById(R.id.header_wrapper);
-        mHeader = (LinearLayout) findViewById(R.id.header);
-        mList = (RecyclerView) findViewById(R.id.list);
+        mHeader = findViewById(R.id.header);
+        mList = findViewById(R.id.list);
         mEmpty = findViewById(R.id.empty);
         mLoading = findViewById(R.id.loading);
 
@@ -271,9 +269,7 @@ public class SmartTable
         // Default selection
         String[] defaultSelectionArgs = mSmartTableProvider.getDefaultSelectionArgs();
         if (defaultSelectionArgs != null) {
-            for (int i = 0 ; i < defaultSelectionArgs.length; i++) {
-                args.add(defaultSelectionArgs[i]);
-            }
+            Collections.addAll(args, defaultSelectionArgs);
         }
 
         // Search
@@ -283,7 +279,7 @@ public class SmartTable
             }
         }
 
-        return args.toArray(new String[args.size()]);
+        return args.toArray(new String[0]);
     }
 
     protected String getOrder() {
@@ -336,6 +332,7 @@ public class SmartTable
         return -1;
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
@@ -349,7 +346,7 @@ public class SmartTable
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         mCursor = data;
         if (mAdapter != null) {
             mAdapter.swapCursor(data);
@@ -357,7 +354,7 @@ public class SmartTable
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mCursor = null;
         if (mAdapter != null) {
             mAdapter.swapCursor(null);

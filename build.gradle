@@ -2,12 +2,13 @@
 
 buildscript {
     repositories {
+        google()
         jcenter()
         maven { url 'https://raw.github.com/xujiaao/mvn-repository/master/releases' }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:3.3.1'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
 
@@ -19,6 +20,7 @@ buildscript {
 
 allprojects {
     repositories {
+        google()
         jcenter()
     }
 }

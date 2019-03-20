@@ -15,4 +15,7 @@
     <string name="exporter_csv_open_file">打开文件</string>
 
     <string name="send_by_email">通过电子邮件发送…</string>
+    <string name="storage_permission_dialog_message">為了保存導出，我們需要訪問您設備的存儲空間。</string>
+    <string name="storage_permission_dialog_allow">允許</string>
+    <string name="storage_permission_dialog_title">外部存儲訪問</string>
 </resources>
