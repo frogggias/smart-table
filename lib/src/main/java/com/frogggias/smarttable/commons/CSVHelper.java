@@ -70,9 +70,10 @@ public class CSVHelper {
                         outputStream.write(mSeparator);
                     }
                     String stringFromCursor = cursor.getString(cursor.getColumnIndex(columnNames[i]));
-                    if (stringFromCursor != null) {
-                        outputStream.write(stringFromCursor.getBytes());
+                    if (stringFromCursor == null) {
+                        stringFromCursor = "null";
                     }
+                    outputStream.write(stringFromCursor.getBytes());
                 }
                 outputStream.write('\n');
                 cursor.moveToNext();
